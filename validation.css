@@ -1,0 +1,11 @@
+/**[[ Copyright Roy Wierer (Seda145) ]]**/
+
+form.response-error input[type=submit] {
+	border: medium solid red;
+}
+form.await input[type=submit] {
+	border: medium solid yellow;
+}
+form.response-load input[type=submit] {
+	border: medium solid green;
+}

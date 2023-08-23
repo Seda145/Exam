@@ -1,0 +1,211 @@
+/**[[ Copyright Roy Wierer (Seda145) ]]**/
+
+/* Default widgets */
+
+body {
+	font-family: "Gill Sans", sans-serif;
+	background-color: #2f0d0d;
+	/* background-color: #293642; */
+}
+
+main {
+	margin-bottom: 100px;
+}
+
+button,
+input[type=submit],
+input[type=radio],
+input[type=checkbox],
+label,
+legend,
+.tab {
+	user-select: none;
+}
+
+legend {
+	font-weight: bold;
+}
+
+legend, label, p, span, h1, h2, h3, h4, h5, h6 {
+	color: white;
+}
+
+label {
+	display: inline-block;
+	margin-top: 10px;
+	margin-bottom: 5px;
+}
+
+label:hover,
+button:hover,
+input[type=checkbox]:hover,
+input[type=radio]:hover,
+input[type=submit]:hover {
+	cursor: pointer;
+}
+
+label:hover {
+	color: #06bff7;
+}
+
+/* input, button {
+	appearance: none;
+} */
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+  font-size: 18px;
+  padding: 10px;
+}
+
+input[type=text],
+input[type=number] {
+	display: block;
+}
+
+textarea, 
+button, 
+pre,
+input[type=submit], 
+input[type=text], 
+input[type=number] {
+	background-color: #384757;
+	border: none;
+	color: white;
+	font-size: 14px;
+	padding: 4px;
+	border-radius: 4px;
+}
+
+button,
+input[type=submit],
+label {
+	transition: opacity 0.15s;
+}
+
+button:hover,
+input[type=submit]:hover,
+label:hover {
+	opacity: 0.8;
+}
+
+button, input[type=submit] {
+	min-height: 40px;
+	font-weight: bold;
+}
+
+textarea {
+	resize: none;
+	min-height: 300px;
+}
+
+hr {
+	border: none;
+	border-bottom: medium dotted white;
+	margin-bottom: 25px;
+	padding-bottom: 25px;
+}
+
+/* Tab system */
+
+#tabs {
+	position: fixed;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: #040504;
+	border-top: thin solid gray;
+	filter: drop-shadow(0px -4px 4px #226f8d);
+	display: flex;
+	justify-content: flex-end;
+}
+
+.tab {
+	display: inline-block;
+	padding: 5px 10px;
+	background-color: #384757;
+	color: white;
+	font-size: 12px;
+	border-radius: 4px;
+	margin: 10px 7px;
+	margin-left: 0;
+	flex: 1;
+	text-align: center;
+}
+.tab:first-child {
+	margin-left: 10px;
+}
+.tab:hover {
+	cursor: pointer;
+	opacity: 0.8;
+	transition: opacity 0.2s;
+}
+
+/* Re-used in app */
+
+.fieldstyle {
+	border-top: none;
+	border-right: none;
+	border-bottom: 0;
+	/* border-left: thin solid white; */
+	background-color: #181e18;
+	border: thin solid #226f8d;
+	margin: 0;
+	margin-bottom: 15px;
+	padding: 15px;
+	border-radius: 4px;
+}
+
+.form-response {
+	/* min-height: 250px; */
+	max-height: 450px;
+	background-color: #181e18;
+	border: thin solid #226f8d;
+	border-left: thin solid #3de851;
+	overflow: auto;
+}
+
+/* Generator  */
+
+#generator-wrap {
+
+}
+
+#generator-input-form-response {
+}
+
+#generator-input-form-response .generator-result-entry {
+	margin: 0px;
+	margin-bottom: 0px;
+	margin-bottom: 5px;
+}
+
+/* Mix  */
+
+#mix-wrap {
+
+}
+
+#mix-input-form-response {
+}
+
+#mix-input-form-response .mix-result-entry {
+	margin: 0px;
+	margin-bottom: 0px;
+	margin-bottom: 5px;
+}
+
+/* Post  */
+
+#post-prefix-area,
+#post-suffix-area {
+	min-height: 150px;
+}
+
+/* States */
+
+.hide {
+	display: none;
+}
