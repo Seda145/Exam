@@ -40,7 +40,8 @@ label:hover,
 button:hover,
 input[type=checkbox]:hover,
 input[type=radio]:hover,
-input[type=submit]:hover {
+input[type=submit]:hover,
+input[type=file] {
 	cursor: pointer;
 }
 
@@ -70,7 +71,8 @@ button,
 pre,
 input[type=submit], 
 input[type=text], 
-input[type=number] {
+input[type=number],
+input[type=file] {
 	background-color: #384757;
 	border: none;
 	color: white;
@@ -81,17 +83,21 @@ input[type=number] {
 
 button,
 input[type=submit],
+input[type=file]
 label {
 	transition: opacity 0.15s;
 }
 
 button:hover,
 input[type=submit]:hover,
+input[type=file]:hover,
 label:hover {
 	opacity: 0.8;
 }
 
-button, input[type=submit] {
+button, 
+input[type=submit],
+input[type=file] {
 	min-height: 40px;
 	font-weight: bold;
 }
@@ -156,6 +162,7 @@ hr {
 	margin-bottom: 15px;
 	padding: 15px;
 	border-radius: 4px;
+	color: white;
 }
 
 .form-response {

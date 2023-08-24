@@ -3,7 +3,7 @@
 
 const App = (() => {
 
-	const QuestionCreationUtils = (() => {
+	const TestUtils = (() => {
 		/* Functions */
 
 		const _GetTestData = function() {
@@ -149,6 +149,7 @@ const App = (() => {
 		let _eQuestionFieldsWrap;
 		// Injection buttons
 		let _eButtonInjectTestdata;
+		let _eButtonInjectFile;
 		
 		/* Functions */
 
@@ -158,6 +159,7 @@ const App = (() => {
 				|| !_eQuestionFieldsWrap
 				// Injection buttons
 				|| !_eButtonInjectTestdata
+				|| !_eButtonInjectFile
 				) {
 				console.log("invalid form element(s).");
 				return false;
@@ -171,6 +173,7 @@ const App = (() => {
 			_eQuestionFieldsWrap = document.getElementById("question-fields-wrap");
 			// Injection buttons
 			_eButtonInjectTestdata = document.getElementById("creation-form-button-inject-testdata");
+			_eButtonInjectFile = document.getElementById("creation-form-button-inject-file");
 		};
 
 		const _Register = function() {
@@ -237,8 +240,22 @@ const App = (() => {
 			// Bind injection button functionality.
 
 			_eButtonInjectTestdata.addEventListener("click", function() {
-				console.log(QuestionCreationUtils.GetTestData());
-				_eTextareaCreationInput.value = JSON.stringify(QuestionCreationUtils.GetTestData(), null, 2);
+				console.log(TestUtils.GetTestData());
+				_eTextareaCreationInput.value = JSON.stringify(TestUtils.GetTestData(), null, 2);
+			}); 
+
+			_eButtonInjectFile.addEventListener("change", function() {
+				if (_eButtonInjectFile.files.length == 0) {
+					return;
+				}
+				const selectedFile = _eButtonInjectFile.files[0];
+
+				let fileReader = new FileReader();
+				fileReader.onload = function(e) {
+					_eTextareaCreationInput.value = e.target.result;
+				};
+				fileReader.readAsText(selectedFile);
+
 			}); 
 		};
 		
