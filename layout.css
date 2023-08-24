@@ -1,13 +1,5 @@
 /**[[ Copyright Roy Wierer (Seda145) ]]**/
-/* Default theme */
-/* Default specialized theme */
-/* Body font size. By default, effectively 18.4px, based on 16px as 'root em' */
-/* Major third scale progression - see https://type-scale.com/ */
-/* Minor third scale progression */
-/* Line height is set to the "Golden ratio" for optimal legibility */
-/*			   */
-/* MEDIA RULES */
-/*			   */
+
 * {
   box-sizing: border-box;
 }

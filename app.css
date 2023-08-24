@@ -148,6 +148,9 @@ hr {
 	opacity: 0.8;
 	transition: opacity 0.2s;
 }
+.tab.active {
+	background-color: #226f8d;
+}
 
 /* Re-used in app */
 

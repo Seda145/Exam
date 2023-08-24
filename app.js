@@ -3,74 +3,6 @@
 
 const App = (() => {
 
-	const TestUtils = (() => {
-		/* Functions */
-
-		const _GetTestData = function() {
-			return {
-				Questions: [
-					{
-						Question: "Apple is a fruit",
-						RightAnswers: [
-							"Yes"
-						],
-						WrongAnswers: [
-							"No"
-						]
-					},
-					{
-						Question: "There are 30 seconds in a minute",
-						RightAnswers: [
-							"No"
-						],
-						WrongAnswers: [
-							"Yes"
-						]
-					},
-					{
-						Question: "Ants can fly",
-						RightAnswers: [
-							"No"
-						],
-						WrongAnswers: [
-							"Yes"
-						]
-					},
-					{
-						Question: "Green is blue",
-						RightAnswers: [
-							"No"
-						],
-						WrongAnswers: [
-							"Yes",
-							"Not always",
-							"No idea"
-						]
-					},
-					{
-						Question: "What is right?",
-						RightAnswers: [
-							"Cats can be white",
-							"Cats can be brown",
-						],
-						WrongAnswers: [
-							"Cats can be purple",
-						]
-					}
-				]
-			}
-		};
-
-		/* Public */
-		
-		return {
-			/* Functions */
-			GetTestData : _GetTestData,
-		};
-
-	})();
-
-
 	const UIUtils = (() => {
 
 		/* Functions */
@@ -148,7 +80,6 @@ const App = (() => {
 		let _eTextareaCreationInput;
 		let _eQuestionFieldsWrap;
 		// Injection buttons
-		let _eButtonInjectTestdata;
 		let _eButtonInjectFile;
 		
 		/* Functions */
@@ -158,7 +89,6 @@ const App = (() => {
 				|| !_eTextareaCreationInput
 				|| !_eQuestionFieldsWrap
 				// Injection buttons
-				|| !_eButtonInjectTestdata
 				|| !_eButtonInjectFile
 				) {
 				console.log("invalid form element(s).");
@@ -172,7 +102,6 @@ const App = (() => {
 			_eTextareaCreationInput = document.getElementById("textarea-creation-input");
 			_eQuestionFieldsWrap = document.getElementById("question-fields-wrap");
 			// Injection buttons
-			_eButtonInjectTestdata = document.getElementById("creation-form-button-inject-testdata");
 			_eButtonInjectFile = document.getElementById("creation-form-button-inject-file");
 		};
 
@@ -238,11 +167,6 @@ const App = (() => {
 			);
 
 			// Bind injection button functionality.
-
-			_eButtonInjectTestdata.addEventListener("click", function() {
-				console.log(TestUtils.GetTestData());
-				_eTextareaCreationInput.value = JSON.stringify(TestUtils.GetTestData(), null, 2);
-			}); 
 
 			_eButtonInjectFile.addEventListener("change", function() {
 				if (_eButtonInjectFile.files.length == 0) {
@@ -397,6 +321,16 @@ const App = (() => {
 					console.log("Navigation error, this contentId is not used.");
 					return;
 			}
+
+			let activeTab = _eTabs.querySelector(".tab.active");
+			if (activeTab) {
+				activeTab.classList.remove("active");
+			}
+			let newTab = _eTabs.querySelector('.tab[data-contentid="' + InContentId + '"]');
+			if (newTab) {
+				newTab.classList.add("active");
+			}
+
 			console.log("Navigated to InContentId: " + InContentId);
 		};
 
