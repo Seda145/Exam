@@ -167,41 +167,41 @@ hr {
 	overflow: auto;
 }
 
-/* Generator  */
-
-#generator-wrap {
-
+input[type=radio],
+input[type=checkbox] {
+	width: 20px;
+	height: 20px;
 }
 
-#generator-input-form-response {
+fieldset label {
+	margin-left: 10px;
+	margin-top: 4px;
+	margin-bottom: 10px;
+	vertical-align: top;
 }
 
-#generator-input-form-response .generator-result-entry {
-	margin: 0px;
-	margin-bottom: 0px;
-	margin-bottom: 5px;
+/* Creation Content */
+
+#textarea-creation-input {
+	height: 67vh
 }
 
-/* Mix  */
+/* Question Content */
 
-#mix-wrap {
-
+#question-content.show-results input + label {
+	width: 80%;
 }
 
-#mix-input-form-response {
+#question-content.show-results input.wrong-answer:checked + label {
+	background-color: #771a1a;
 }
 
-#mix-input-form-response .mix-result-entry {
-	margin: 0px;
-	margin-bottom: 0px;
-	margin-bottom: 5px;
+#question-content.show-results input.right-answer:not(:checked) + label {
+	background-color: #231a77;
 }
 
-/* Post  */
-
-#post-prefix-area,
-#post-suffix-area {
-	min-height: 150px;
+#question-content.show-results input.right-answer:checked + label {
+	background-color: #178833;
 }
 
 /* States */

@@ -18,40 +18,31 @@
 		<main class="main-wrap container">
 
 			<div id="tabs" class="main-wrap">
+				<span class="tab" data-contentid="0">Create</span>
 				<span class="tab" data-contentid="1">Questions</span>
+				<span class="tab" data-contentid="2">Results</span>
 			</div>
 
-			<div id="question-content" class="main-wrap">
-				<div id="anchor-questions"></div>
-			
-				<form id="question-form">
+			<div id="creation-content" class="main-wrap">
+				<form id="creation-form">
 					<div class="row">
-						<div class="col-12">
+						<div class="col-8 col-12-m">
 							<fieldset class="fieldstyle">
-								<Legend>Question</Legend>
-	
-								<div class="row">
-									<div class="col-12">
-										<input checked type="radio" id="radio-question-0-answer-0" name="question-0-answer" value="0">
-										<label for="radio-question-0-answer-0">Answer 0</label>		
-									</div>
-								</div>
-	
-								<div class="row">
-									<div class="col-12">
-										<input type="radio" id="radio-question-0-answer-1" name="question-0-answer" value="1">
-										<label for="radio-question-0-answer-1">Answer 1</label>			
-									</div>
-								</div>
-	
-								<div class="row">
-									<div class="col-12">
-										<input type="radio" id="radio-question-0-answer-2" name="question-0-answer" value="2">
-										<label for="radio-question-0-answer-2">Answer 2</label>		
-									</div>
-								</div>
+								<legend>Creation (JSON)</legend>
+								<textarea id="textarea-creation-input" name="creation-data"></textarea>
 							</fieldset>
-							
+						</div>
+
+						<div class="col-4 col-12-m">
+							<fieldset class="fieldstyle">
+								<legend>JSON Injection</legend>
+								<button type="button" id="creation-form-button-inject-testdata">Testdata</button>
+							</fieldset>
+						</div>
+					</div>
+					
+					<div class="row submit-row">
+						<div class="col-12">
 							<fieldset class="fieldstyle">
 								<legend>Submit</legend>
 								<input type="submit" value="Submit">
@@ -59,7 +50,52 @@
 						</div>
 					</div>
 				</form>
-			</div>			
+			</div>
+
+			<div id="question-content" class="main-wrap">
+				<form id="question-form">
+					<div class="row">
+						<div class="col-12">
+							<div id="question-fields-wrap">
+								<fieldset class="fieldstyle">
+									<Legend>Question</Legend>
+		
+									<div class="row">
+										<div class="col-12">
+											<input checked type="radio" id="radio-question-0-answer-0" name="question-0-answer" value="0">
+											<label for="radio-question-0-answer-0">Answer 0</label>		
+										</div>
+									</div>
+		
+									<div class="row">
+										<div class="col-12">
+											<input type="radio" id="radio-question-0-answer-1" name="question-0-answer" value="1">
+											<label for="radio-question-0-answer-1">Answer 1</label>			
+										</div>
+									</div>
+		
+									<div class="row">
+										<div class="col-12">
+											<input type="radio" id="radio-question-0-answer-2" name="question-0-answer" value="2">
+											<label for="radio-question-0-answer-2">Answer 2</label>		
+										</div>
+									</div>
+								</fieldset>
+							</div>
+						</div>
+					</div>
+
+					<div class="row submit-row">
+						<div class="col-12">
+							<fieldset class="fieldstyle">
+								<legend>Submit</legend>
+								<input type="submit" value="Submit">
+							</fieldset>
+						</div>
+					</div>
+
+				</form>
+			</div>		
 						
 		</main>
 		
