@@ -137,7 +137,28 @@ const App = (() => {
 						const Description = '<p class="question-description">' + StringUtils.StripHTML(questionX.Question) + '</p>';
 						newHTML += Description;
 
-						const answers = questionX.RightAnswers.concat(questionX.WrongAnswers);
+						let answers = []; 
+
+						// If this is a "True or False" question. Always make True appear first to not disorient the reader.
+						if (questionX.RightAnswers.length == 1
+							&& questionX.WrongAnswers.length == 1
+							) {
+							if (questionX.RightAnswers[0] == "True") {
+								answers.push(questionX.RightAnswers[0]);
+								answers.push(questionX.WrongAnswers[0]);
+							}
+							else {
+								answers.push(questionX.WrongAnswers[0]);
+								answers.push(questionX.RightAnswers[0]);
+							}
+						}
+
+						// Otherwise merge both arrays and shuffle.
+						if (answers.length == 0) {
+							answers = questionX.RightAnswers.concat(questionX.WrongAnswers);
+							answers.sort(() => Math.random() > 0.5);
+						}
+						
 						const inputType = questionX.RightAnswers.length > 1 ? 'checkbox' : 'radio';
 
 						let answerIndex = 0;
