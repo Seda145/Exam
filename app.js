@@ -188,6 +188,7 @@ const App = (() => {
 					_eQuestionFieldsWrap.insertAdjacentHTML('afterbegin', newHTML);
 
 					Navigation.NavigateTo(1);
+					Navigation.UpdateTabVisibility();
 
 					return false;
 				},
@@ -410,13 +411,15 @@ const App = (() => {
 		let _eTabs;
 		let _eCreationContent;
 		let _eQuestionContent;
-
+		let _eQuestionFieldsWrap;
+		
 		/* Functions */
 
 		const _IsValid = function() {
 			if (!_eTabs
 				|| !_eCreationContent
 				|| !_eQuestionContent
+				|| !_eQuestionFieldsWrap
 				) {
 				console.log("invalid Navigation element(s).");
 				return false;
@@ -428,6 +431,7 @@ const App = (() => {
 			_eTabs = document.getElementById("tabs");
 			_eCreationContent = document.getElementById("creation-content");
 			_eQuestionContent = document.getElementById("question-content");
+			_eQuestionFieldsWrap = document.getElementById("question-fields-wrap");
 		};
 
 		const _Register = function() {
@@ -485,6 +489,17 @@ const App = (() => {
 			// console.log("Navigated to InContentId: " + InContentId);
 		};
 
+		const _UpdateTabVisibility = function() {
+			const questionFieldSets = _eQuestionFieldsWrap.querySelectorAll("fieldset");
+			const questionAmount = questionFieldSets.length;
+			if (questionAmount > 0) {
+				_eTabs.classList.remove("hide");
+			}
+			else {
+				_eTabs.classList.add("hide");
+			}
+		};
+
 		/* Public */
 
 		return {
@@ -492,6 +507,7 @@ const App = (() => {
 			IsValid : _IsValid,
 			Register : _Register,
 			NavigateTo : _NavigateTo,
+			UpdateTabVisibility : _UpdateTabVisibility,
 		};
 
 	})();
