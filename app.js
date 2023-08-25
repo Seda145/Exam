@@ -131,8 +131,11 @@ const App = (() => {
 					for (const questionX of json.Questions) {
 						newHTML += '<fieldset class="fieldstyle">';
 
-						const legend = '<legend>' + StringUtils.StripHTML(questionX.Question) + '</legend>';
+						const legend = '<legend>' + questionIndex + '.</legend>';
 						newHTML += legend;
+
+						const Description = '<p class="question-description">' + StringUtils.StripHTML(questionX.Question) + '</p>';
+						newHTML += Description;
 
 						const answers = questionX.RightAnswers.concat(questionX.WrongAnswers);
 						const inputType = questionX.RightAnswers.length > 1 ? 'checkbox' : 'radio';
@@ -151,6 +154,10 @@ const App = (() => {
 
 							newHTML += '</div></div>';
 							answerIndex++;
+						}
+
+						if (questionX.Note) {
+							newHTML += '<p class="result-answer-note">Note: ' + questionX.Note + '</p>';
 						}
 
 						newHTML += '</fieldset>';
@@ -357,7 +364,10 @@ const App = (() => {
 
 			_eProgressAnsweredQuestionsCounter.innerHTML = '<p>Answered:</br>' + answeredQuestions + ' / ' + questionAmount + '</p>';
 			_eProgressTotalScore.innerHTML = '<p>Score:</br>' + totalScore + ' / ' + questionAmount + '</p>';
-			_eProgressScoreToTen.innerHTML = '<p>Score (0-10):</br>' + (totalScore / questionAmount * 10) + ' / 10</p>';
+			let scoreToTen = (totalScore / questionAmount * 10);
+			// Round to 1 decimal:
+			scoreToTen = +scoreToTen.toFixed(1);
+			_eProgressScoreToTen.innerHTML = '<p>Score (0-10):</br>' + scoreToTen + ' / 10</p>';
 		};
 
 		/* Public */

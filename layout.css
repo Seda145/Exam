@@ -1,5 +1,10 @@
 /**[[ Copyright Roy Wierer (Seda145) ]]**/
 
+/* fieldset firefox browser fix, seems to have a min-width set */
+fieldset {
+  min-width: 0;
+}
+
 * {
   box-sizing: border-box;
 }
