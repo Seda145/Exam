@@ -117,18 +117,27 @@ const App = (() => {
 				function (e) {
 					e.preventDefault();
 
-					// Just grab the value directly from the textarea, no need to process the form itself.
-					const json = JSON.parse(_eTextareaCreationInput.value);
+					const formData = new FormData(e.target);
+					const bShuffleQuestions = formData.get("creation-shuffle-questions") === 'on';
+					const json = JSON.parse(formData.get("creation-data"));
 
-					console.log("Retrieved data from form:");
-					console.log(json);
+					let questions = json.Questions;
+
+					if (bShuffleQuestions) {
+						// Shuffle questions
+						questions.sort(() => Math.random() > 0.5);
+						console.log("Shuffling questions.");
+					}
+
+					console.log("Processed questions:");
+					console.log(questions);
 
 					// Empty any present questions on the question form, since they will be created from the new data.
 					_eQuestionFieldsWrap.innerHTML = "";
 					let newHTML = '';
 
 					let questionIndex = 0;
-					for (const questionX of json.Questions) {
+					for (const questionX of questions) {
 						newHTML += '<fieldset class="fieldstyle">';
 
 						const legend = '<legend>' + questionIndex + '.</legend>';
