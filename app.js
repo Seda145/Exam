@@ -187,7 +187,6 @@ const App = (() => {
 		
 		return {
 		  /* Functions */
-		  IsValid : _IsValid,
 		  Register : _Register
 		};
 	
@@ -199,12 +198,16 @@ const App = (() => {
 
 		let _eQuestionForm;
 		let _eQuestionFieldsWrap;
+		let _eProgressAnsweredQuestionsCounter;
+		let _eProgressTotalScore;
 		
 		/* Functions */
 
 		const _IsValid = function() {
 			if (!_eQuestionForm 
 				|| !_eQuestionFieldsWrap
+				|| !_eProgressAnsweredQuestionsCounter
+				|| !_eProgressTotalScore
 				) {
 				console.log("invalid form element(s).");
 				return false;
@@ -215,6 +218,8 @@ const App = (() => {
 		const _SetElementVariables = function() {
 			_eQuestionForm = document.getElementById("question-form");
 			_eQuestionFieldsWrap = document.getElementById("question-fields-wrap");
+			_eProgressAnsweredQuestionsCounter = document.getElementById("progress-answered-questions-counter");
+			_eProgressTotalScore = document.getElementById("progress-total-score");
 		};
 
 		const _Register = function() {
@@ -254,6 +259,119 @@ const App = (() => {
 	
 	})();
 
+
+	const ResultsOverlay = (() => {
+		/* Elements */
+
+		let _eQuestionContent;
+		let _eQuestionFieldsWrap;
+		let _eQuestionInteractionBlocker;
+		let _eProgressBar;
+		let _eProgressAnsweredQuestionsCounter;
+		let _eProgressTotalScore;
+		let _eProgressScoreToTen;
+
+		/* Functions */
+
+		const _IsValid = function() {
+			if (!_eQuestionContent
+				|| !_eQuestionFieldsWrap
+				|| !_eQuestionInteractionBlocker
+				|| !_eProgressBar
+				|| !_eProgressAnsweredQuestionsCounter
+				|| !_eProgressTotalScore
+				|| !_eProgressScoreToTen
+				) {
+				console.log("invalid ResultsUI element(s).");
+				return false;
+			}
+			return true;
+		};
+
+		const _SetElementVariables = function() {
+			_eQuestionContent = document.getElementById("question-content");
+			_eQuestionFieldsWrap = document.getElementById("question-fields-wrap");
+			_eQuestionInteractionBlocker = document.getElementById("question-interaction-blocker");
+			_eProgressBar = document.getElementById("progress-bar");
+			_eProgressAnsweredQuestionsCounter = document.getElementById("progress-answered-questions-counter");
+			_eProgressTotalScore = document.getElementById("progress-total-score");
+			_eProgressScoreToTen = document.getElementById("progress-score-to-ten");
+		};
+
+		const _Register = function() {
+			_SetElementVariables();
+			if (!_IsValid()) {
+				return false;
+			}
+
+			// When the question interaction blocker is clicked, navigate from results back to questions (it unblocks interaction, which was blocked to show results.).
+			_eQuestionInteractionBlocker.addEventListener("click", function() {
+				Navigation.NavigateTo(1);
+			}); 
+		};
+
+		const _ShowResults = function() {
+			_eQuestionContent.classList.add("show-results");
+			_eQuestionInteractionBlocker.classList.add("active");
+			_eProgressBar.classList.add("active");
+		};
+
+		const _HideResults = function() {
+			_eQuestionContent.classList.remove("show-results");
+			_eQuestionInteractionBlocker.classList.remove("active");
+			_eProgressBar.classList.remove("active");
+		};
+
+		const _UpdateProgressWidgets = function() {
+			const questionFieldSets = _eQuestionFieldsWrap.querySelectorAll("fieldset");
+			const questionAmount = questionFieldSets.length;
+			if (questionAmount == 0) {
+				console.log("can't show answers for 0 questions");
+				return;
+			}
+
+			// Gather score data.
+
+			let totalScore = 0;
+			let answeredQuestions = 0;
+			for (questionFieldsetX of questionFieldSets) {
+				if (questionFieldsetX.querySelector("input:checked")) {
+					answeredQuestions++;
+				}
+				else {
+					// No input was checked, counting as a mistake.
+					continue;
+				}
+
+				if (questionFieldsetX.querySelector("input.wrong-answer:checked")
+					|| questionFieldsetX.querySelector("input.right-answer:not(:checked)")
+					) {
+					// A wrong input was checked, counting as a mistake.
+					continue;
+				}
+
+				totalScore++;
+			}
+
+			// Update the widgets.
+
+			_eProgressAnsweredQuestionsCounter.innerHTML = '<p>Answered:</br>' + answeredQuestions + ' / ' + questionAmount + '</p>';
+			_eProgressTotalScore.innerHTML = '<p>Score:</br>' + totalScore + ' / ' + questionAmount + '</p>';
+			_eProgressScoreToTen.innerHTML = '<p>Score (0-10):</br>' + (totalScore / questionAmount * 10) + ' / 10</p>';
+		};
+
+		/* Public */
+
+		return {
+			/* Functions */
+			Register : _Register,
+			ShowResults : _ShowResults,
+			HideResults : _HideResults,
+			UpdateProgressWidgets : _UpdateProgressWidgets,
+		};
+		
+	})();
+
 	
 	const Navigation = (() => {
 		/* Elements */
@@ -269,7 +387,7 @@ const App = (() => {
 				|| !_eCreationContent
 				|| !_eQuestionContent
 				) {
-				console.log("invalid navigation element(s).");
+				console.log("invalid Navigation element(s).");
 				return false;
 			}
 			return true;
@@ -288,7 +406,6 @@ const App = (() => {
 			}
 
 			// Listen to when a tab is clicked. On click, navigate to its content id.
-
 			_eTabs.querySelectorAll(".tab").forEach(function (InElemX) {
 				InElemX.addEventListener(
 					"click",
@@ -302,20 +419,23 @@ const App = (() => {
 		const _NavigateTo = function(InContentId) {
 			switch (Number(InContentId)) {
 				case 0:
+					// Navigate to question creation, do not show results.
 					UIUtils.UpdateVisibility(_eCreationContent, true);
 					UIUtils.UpdateVisibility(_eQuestionContent, false);
-					_eQuestionContent.classList.remove("show-results");
+					ResultsOverlay.HideResults();
 				break;
 				case 1:
+					// Navigate to questions, do not show results.
 					UIUtils.UpdateVisibility(_eCreationContent, false);
 					UIUtils.UpdateVisibility(_eQuestionContent, true);
-					_eQuestionContent.classList.remove("show-results");
-
+					ResultsOverlay.HideResults();
 				break;
 				case 2:
+					// Navigate to questions, show results.
 					UIUtils.UpdateVisibility(_eCreationContent, false);
 					UIUtils.UpdateVisibility(_eQuestionContent, true);
-					_eQuestionContent.classList.add("show-results");
+					ResultsOverlay.UpdateProgressWidgets();
+					ResultsOverlay.ShowResults();
 				break;
 				default:
 					console.log("Navigation error, this contentId is not used.");
@@ -331,7 +451,7 @@ const App = (() => {
 				newTab.classList.add("active");
 			}
 
-			console.log("Navigated to InContentId: " + InContentId);
+			// console.log("Navigated to InContentId: " + InContentId);
 		};
 
 		/* Public */
@@ -352,6 +472,7 @@ const App = (() => {
 		// Register the forms
 		CreationForm.Register();
 		QuestionForm.Register();
+		ResultsOverlay.Register();
 		// Register the navigation module.
 		Navigation.Register();
 		// Initial navigation.

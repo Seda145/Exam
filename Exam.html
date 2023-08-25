@@ -17,12 +17,6 @@
 
 		<main class="main-wrap container">
 
-			<div id="tabs" class="main-wrap">
-				<span class="tab" data-contentid="0">Create</span>
-				<span class="tab" data-contentid="1">Questions</span>
-				<span class="tab" data-contentid="2">Results</span>
-			</div>
-
 			<div id="creation-content" class="main-wrap">
 				<form id="creation-form">
 					<div class="row">
@@ -79,7 +73,23 @@
 					</div>
 
 				</form>
-			</div>		
+			</div>	
+
+			<div id="question-interaction-blocker"></div>
+			
+			<div id="bottom-bar" class="main-wrap">
+				<div id="progress-bar">
+					<span id="progress-answered-questions-counter" class="progress-element"></span>
+					<span id="progress-total-score" class="progress-element"></span>
+					<span id="progress-score-to-ten" class="progress-element"></span>
+				</div>
+
+				<div id="tabs">
+					<span class="tab" data-contentid="0">Create</span>
+					<span class="tab" data-contentid="1">Questions</span>
+					<span class="tab" data-contentid="2">Results</span>
+				</div>
+			</div>
 						
 		</main>
 		

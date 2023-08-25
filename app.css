@@ -9,7 +9,7 @@ body {
 }
 
 main {
-	margin-bottom: 100px;
+	margin-bottom: 175px;
 }
 
 button,
@@ -116,7 +116,27 @@ hr {
 
 /* Tab system */
 
-#tabs {
+#progress-bar {
+	display: none;
+	width: 100%;
+	background-color: #181e18;
+}
+#progress-bar.active {
+	display: flex;
+}
+
+.progress-element {
+	display: inline-block;
+	/* background-color: #384757; */
+	color: white;
+	font-size: 16px;
+	border-radius: 4px;
+	flex: 1;
+	text-align: center;
+	min-height: 50px;
+}
+
+#bottom-bar {
 	position: fixed;
 	left: 0;
 	right: 0;
@@ -125,6 +145,12 @@ hr {
 	border-top: thin solid gray;
 	filter: drop-shadow(0px -4px 4px #226f8d);
 	display: flex;
+	flex-direction: column;
+}
+
+#tabs {
+	display: flex;
+	width: 100%;
 	justify-content: flex-end;
 }
 
@@ -212,6 +238,21 @@ fieldset label {
 
 #question-content.show-results input.right-answer:checked + label {
 	background-color: #178833;
+}
+
+#question-interaction-blocker {
+	display: none;
+	position: fixed;
+	left: 0;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	opacity: .05;
+	background-color: white;
+}
+
+#question-interaction-blocker.active {
+	display: block;
 }
 
 /* States */
