@@ -136,11 +136,11 @@ const App = (() => {
 					_eQuestionFieldsWrap.innerHTML = "";
 					let newHTML = '';
 
-					let questionIndex = 0;
+					let questionID = 1;
 					for (const questionX of questions) {
 						newHTML += '<fieldset class="fieldstyle">';
 
-						const legend = '<legend>' + questionIndex + '.</legend>';
+						const legend = '<legend>' + questionID + '.</legend>';
 						newHTML += legend;
 
 						const Description = '<p class="question-description">' + StringUtils.StripHTML(questionX.Question) + '</p>';
@@ -174,10 +174,10 @@ const App = (() => {
 						for (const answerX of answers) {
 							newHTML += '<div class="row"><div class="col-12">';
 
-							const answerID = 'radio-question-' + questionIndex + '-answer-' + answerIndex;
+							const answerID = 'radio-question-' + questionID + '-answer-' + answerIndex;
 							const answerType = questionX.RightAnswers.includes(answerX) ? 'right-answer' : 'wrong-answer';
 
-							const answerString = '<input type="' + inputType + '" id="' + answerID + '" name="question-' + questionIndex + '-answer" class="' + answerType +'" value="' + answerIndex + '"></input>';
+							const answerString = '<input type="' + inputType + '" id="' + answerID + '" name="question-' + questionID + '-answer" class="' + answerType +'" value="' + answerIndex + '"></input>';
 							newHTML += answerString;
 							const answerlabel = '<label for="' + answerID + '">' + StringUtils.StripHTML(answerX) + '</label>';
 							newHTML += answerlabel;
@@ -191,7 +191,7 @@ const App = (() => {
 						}
 
 						newHTML += '</fieldset>';
-						questionIndex++;
+						questionID++;
 					}
 
 					_eQuestionFieldsWrap.insertAdjacentHTML('afterbegin', newHTML);
