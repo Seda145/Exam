@@ -81,6 +81,9 @@ const App = (() => {
 		let _eQuestionFieldsWrap;
 		// Injection buttons
 		let _eButtonInjectFile;
+		// Parameter widgets
+		let _eNumberStartAtLesson;
+		let _eNumberEndAtLesson;
 		
 		/* Functions */
 
@@ -90,6 +93,9 @@ const App = (() => {
 				|| !_eQuestionFieldsWrap
 				// Injection buttons
 				|| !_eButtonInjectFile
+				// Parameter widgets
+				|| !_eNumberStartAtLesson
+				|| !_eNumberEndAtLesson
 				) {
 				console.log("invalid form element(s).");
 				return false;
@@ -103,6 +109,9 @@ const App = (() => {
 			_eQuestionFieldsWrap = document.getElementById("question-fields-wrap");
 			// Injection buttons
 			_eButtonInjectFile = document.getElementById("creation-form-button-inject-file");
+			// Parameter widgets
+			_eNumberStartAtLesson = document.getElementById("creation-form-number-start-at-lesson");
+			_eNumberEndAtLesson = document.getElementById("creation-form-number-end-at-lesson");
 		};
 
 		const _Register = function() {
@@ -121,77 +130,96 @@ const App = (() => {
 					const bShuffleQuestions = formData.get("creation-shuffle-questions") === 'on';
 					const json = JSON.parse(formData.get("creation-data"));
 
-					let questions = json.Questions;
-
-					if (bShuffleQuestions) {
-						// Shuffle questions
-						questions.sort(() => Math.random() > 0.5);
-						console.log("Shuffling questions.");
-					}
-
-					console.log("Processed questions:");
-					console.log(questions);
-
 					// Empty any present questions on the question form, since they will be created from the new data.
 					_eQuestionFieldsWrap.innerHTML = "";
 					let newHTML = '';
 
-					let questionID = 1;
-					for (const questionX of questions) {
-						newHTML += '<fieldset class="fieldstyle">';
+					let lessonID = 1;
+					const startAtLesson = _eNumberStartAtLesson.value;
+					const endAtLesson = _eNumberEndAtLesson.value;
+					for (const lessonX of json.Lessons) {
+						if (lessonID < startAtLesson) {
+							lessonID++;
+							continue;
+						}
+						if (lessonID > endAtLesson) {
+							break;
+						}
 
-						const legend = '<legend>' + questionID + '.</legend>';
-						newHTML += legend;
+						let questions = lessonX.Questions;
 
-						const Description = '<p class="question-description">' + StringUtils.StripHTML(questionX.Question) + '</p>';
-						newHTML += Description;
+						if (bShuffleQuestions) {
+							// Shuffle questions
+							questions.sort(() => Math.random() > 0.5);
+							console.log("Shuffling questions.");
+						}
 
-						let answers = []; 
+						console.log("Processed questions:");
+						console.log(questions);
 
-						// If this is a "True or False" question. Always make True appear first to not disorient the reader.
-						if (questionX.RightAnswers.length == 1
-							&& questionX.WrongAnswers.length == 1
-							) {
-							if (questionX.RightAnswers[0] == "True") {
-								answers.push(questionX.RightAnswers[0]);
-								answers.push(questionX.WrongAnswers[0]);
+						newHTML += '<div class="question-lesson-wrap">';
+						newHTML += '<h4 class="question-lesson-title">' + 'Les: ' + lessonID + '</h4>';
+
+						let questionID = 1;
+						for (const questionX of questions) {
+							newHTML += '<fieldset class="fieldstyle">';
+
+							const legend = '<legend>' + questionID + '.</legend>';
+							newHTML += legend;
+
+							const Description = '<p class="question-description">' + StringUtils.StripHTML(questionX.Question) + '</p>';
+							newHTML += Description;
+
+							let answers = []; 
+
+							// If this is a "True or False" question. Always make True appear first to not disorient the reader.
+							if (questionX.RightAnswers.length == 1
+								&& questionX.WrongAnswers.length == 1
+								) {
+								if (questionX.RightAnswers[0] == "True") {
+									answers.push(questionX.RightAnswers[0]);
+									answers.push(questionX.WrongAnswers[0]);
+								}
+								else {
+									answers.push(questionX.WrongAnswers[0]);
+									answers.push(questionX.RightAnswers[0]);
+								}
 							}
-							else {
-								answers.push(questionX.WrongAnswers[0]);
-								answers.push(questionX.RightAnswers[0]);
+
+							// Otherwise merge both arrays and shuffle.
+							if (answers.length == 0) {
+								answers = questionX.RightAnswers.concat(questionX.WrongAnswers);
+								answers.sort(() => Math.random() > 0.5);
 							}
+							
+							const inputType = questionX.RightAnswers.length > 1 ? 'checkbox' : 'radio';
+
+							let answerIndex = 0;
+							for (const answerX of answers) {
+								newHTML += '<div class="row"><div class="col-12">';
+
+								const answerID = 'radio-question-' + questionID + '-answer-' + answerIndex;
+								const answerType = questionX.RightAnswers.includes(answerX) ? 'right-answer' : 'wrong-answer';
+
+								const answerString = '<input type="' + inputType + '" id="' + answerID + '" name="question-' + questionID + '-answer" class="' + answerType +'" value="' + answerIndex + '"></input>';
+								newHTML += answerString;
+								const answerlabel = '<label for="' + answerID + '">' + StringUtils.StripHTML(answerX) + '</label>';
+								newHTML += answerlabel;
+
+								newHTML += '</div></div>';
+								answerIndex++;
+							}
+
+							if (questionX.Note) {
+								newHTML += '<p class="result-answer-note">Note: ' + questionX.Note + '</p>';
+							}
+
+							newHTML += '</fieldset>';
+							questionID++;
 						}
 
-						// Otherwise merge both arrays and shuffle.
-						if (answers.length == 0) {
-							answers = questionX.RightAnswers.concat(questionX.WrongAnswers);
-							answers.sort(() => Math.random() > 0.5);
-						}
-						
-						const inputType = questionX.RightAnswers.length > 1 ? 'checkbox' : 'radio';
-
-						let answerIndex = 0;
-						for (const answerX of answers) {
-							newHTML += '<div class="row"><div class="col-12">';
-
-							const answerID = 'radio-question-' + questionID + '-answer-' + answerIndex;
-							const answerType = questionX.RightAnswers.includes(answerX) ? 'right-answer' : 'wrong-answer';
-
-							const answerString = '<input type="' + inputType + '" id="' + answerID + '" name="question-' + questionID + '-answer" class="' + answerType +'" value="' + answerIndex + '"></input>';
-							newHTML += answerString;
-							const answerlabel = '<label for="' + answerID + '">' + StringUtils.StripHTML(answerX) + '</label>';
-							newHTML += answerlabel;
-
-							newHTML += '</div></div>';
-							answerIndex++;
-						}
-
-						if (questionX.Note) {
-							newHTML += '<p class="result-answer-note">Note: ' + questionX.Note + '</p>';
-						}
-
-						newHTML += '</fieldset>';
-						questionID++;
+						newHTML += "</div>";
+						lessonID++;
 					}
 
 					_eQuestionFieldsWrap.insertAdjacentHTML('afterbegin', newHTML);
@@ -215,11 +243,31 @@ const App = (() => {
 				let fileReader = new FileReader();
 				fileReader.onload = function(e) {
 					_eTextareaCreationInput.value = e.target.result;
+					_UpdateParameterWidgets();
 				};
 				fileReader.readAsText(selectedFile);
-
 			}); 
+
+			// Update parameters when JSON input changes.
+
+			_eTextareaCreationInput.addEventListener("input", function() {
+				_UpdateParameterWidgets();
+			}); 
+
+			// Update state
+
+			_UpdateParameterWidgets();
 		};
+
+		const _UpdateParameterWidgets = function() {
+			// console.log("Updating creation parameter widgets.");
+			const json = JSON.parse(_eTextareaCreationInput.value);
+			const lessonAmount = json.Lessons.length;
+			_eNumberEndAtLesson.value = lessonAmount;
+			if (_eNumberStartAtLesson.value > _eNumberEndAtLesson.value) {
+				_eNumberStartAtLesson.value = _eNumberEndAtLesson.value;
+			}
+		}
 		
 		/* Public */
 		

@@ -241,13 +241,36 @@ input[type=checkbox] {
 	height: 67vh
 }
 
+#creation-parameters label {
+	min-width: 150px;
+	margin-right: 10px;
+}
+
+#creation-parameters input[type=number] {
+	display: inline-block;
+	width: auto;
+}
+
 /* Question Content */
 
-#question-content .fieldstyle {
-	margin: auto;
-	margin-bottom: 50px;
+.question-lesson-wrap {
+	padding: 15px;
+	background-color: #110d1e;
 	width: 800px;
 	max-width: 100%;
+	margin: auto;
+	margin-bottom: 100px;
+	border-radius: 15px;
+	border: thin solid #226f8d;
+}
+
+.question-lesson-title {
+	font-size: 16px;
+	color: white;
+}
+
+#question-content .fieldstyle {
+	margin-bottom: 50px;
 }
 
 #question-content .question-description {

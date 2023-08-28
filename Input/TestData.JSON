@@ -1,51 +1,56 @@
 {
-  "Questions": [
+  "Lessons": [
     {
-      "Question": "Apple is a fruit",
-      "RightAnswers": [
-        "Yes"
-      ],
-      "WrongAnswers": [
-        "No"
-      ]
-    },
-    {
-      "Question": "There are 30 seconds in a minute",
-      "RightAnswers": [
-        "No"
-      ],
-      "WrongAnswers": [
-        "Yes"
-      ]
-    },
-    {
-      "Question": "Ants can fly",
-      "RightAnswers": [
-        "No"
-      ],
-      "WrongAnswers": [
-        "Yes"
-      ]
-    },
-    {
-      "Question": "Green is blue",
-      "RightAnswers": [
-        "No"
-      ],
-      "WrongAnswers": [
-        "Yes",
-        "Not always",
-        "No idea"
-      ]
-    },
-    {
-      "Question": "What is right?",
-      "RightAnswers": [
-        "Cats can be white",
-        "Cats can be brown"
-      ],
-      "WrongAnswers": [
-        "Cats can be purple"
+      "Lesson": "1",
+      "Questions": [
+        {
+          "Question": "Apple is a fruit",
+          "RightAnswers": [
+            "Yes"
+          ],
+          "WrongAnswers": [
+            "No"
+          ]
+        },
+        {
+          "Question": "There are 30 seconds in a minute",
+          "RightAnswers": [
+            "No"
+          ],
+          "WrongAnswers": [
+            "Yes"
+          ]
+        },
+        {
+          "Question": "Ants can fly",
+          "RightAnswers": [
+            "No"
+          ],
+          "WrongAnswers": [
+            "Yes"
+          ]
+        },
+        {
+          "Question": "Green is blue",
+          "RightAnswers": [
+            "No"
+          ],
+          "WrongAnswers": [
+            "Yes",
+            "Not always",
+            "No idea"
+          ]
+        },
+        {
+          "Question": "What is right?",
+          "RightAnswers": [
+            "Cats can be white",
+            "Cats can be brown"
+          ],
+          "WrongAnswers": [
+            "Cats can be purple"
+          ]
+        }
       ]
     }
   ]

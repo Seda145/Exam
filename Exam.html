@@ -36,11 +36,23 @@
 
 							</fieldset>
 
-							<fieldset class="fieldstyle">
-								<legend>Parameters</legend>
+							<fieldset id="creation-parameters" class="fieldstyle">
+								<legend>Finalize</legend>
 
-								<label for="creation-form-checkbox-shuffle-questions">Shuffle questions:</label>		
-								<input type="checkbox" checked="" id="creation-form-checkbox-shuffle-questions" name="creation-shuffle-questions">
+								<div>
+									<label for="creation-form-checkbox-shuffle-questions">Shuffle questions:</label>		
+									<input type="checkbox" checked="" id="creation-form-checkbox-shuffle-questions" name="creation-shuffle-questions">
+								</div>
+
+								<div>
+									<label for="creation-form-number-start-at-lesson">Start at lesson:</label>		
+									<input type="number" min="1" value="1" id="creation-form-number-start-at-lesson" name="creation-start-at-lesson">
+								</div>
+
+								<div>
+									<label for="creation-form-number-end-at-lesson">End at lesson:</label>		
+									<input type="number" min="1" value="1" id="creation-form-number-end-at-lesson" name="creation-end-at-lesson">
+								</div>
 
 							</fieldset>
 						</div>
