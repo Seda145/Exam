@@ -74,6 +74,11 @@ const App = (() => {
 	
 
 	const CreationForm = (() => {
+		/* State */
+
+		// Cache JSON so we don't have to parse it every request.
+		let _json = {};
+
 		/* Elements */
 
 		let _eCreationForm;
@@ -128,16 +133,20 @@ const App = (() => {
 
 					const formData = new FormData(e.target);
 					const bShuffleQuestions = formData.get("creation-shuffle-questions") === 'on';
-					const json = JSON.parse(formData.get("creation-data"));
+					const bMixLessons = formData.get("creation-mix-lessons") === 'on';
 
 					// Empty any present questions on the question form, since they will be created from the new data.
 					_eQuestionFieldsWrap.innerHTML = "";
 					let newHTML = '';
 
+					let bHasAnyQuestion = false;
+
+					lessons = [];
+					const startAtLesson = parseInt(_eNumberStartAtLesson.value);
+					const endAtLesson = parseInt(_eNumberEndAtLesson.value);
+
 					let lessonID = 1;
-					const startAtLesson = _eNumberStartAtLesson.value;
-					const endAtLesson = _eNumberEndAtLesson.value;
-					for (const lessonX of json.Lessons) {
+					for (const lessonX of _json.Lessons) {
 						if (lessonID < startAtLesson) {
 							lessonID++;
 							continue;
@@ -145,23 +154,45 @@ const App = (() => {
 						if (lessonID > endAtLesson) {
 							break;
 						}
+						lessons.push(lessonX);
+						lessonID++;
+					}
 
+					if (bMixLessons) {
+						// console.log("Mixing lessons.");
+						let mixedLesson = {};
+						mixedLesson.Lesson = "Mix";
+						mixedLesson.Questions = [];
+						for (const lessonX of lessons) {
+							mixedLesson.Questions = mixedLesson.Questions.concat(lessonX.Questions);
+						}
+
+						lessons = [];
+						lessons.push(mixedLesson);
+					}
+
+					for (const lessonX of lessons) {
 						let questions = lessonX.Questions;
 
 						if (bShuffleQuestions) {
-							// Shuffle questions
 							questions.sort(() => Math.random() > 0.5);
-							console.log("Shuffling questions.");
+							// console.log("Shuffling questions.");
 						}
 
-						console.log("Processed questions:");
-						console.log(questions);
+						// console.log("Processed questions:");
+						// console.log(questions);
 
 						newHTML += '<div class="question-lesson-wrap">';
-						newHTML += '<h4 class="question-lesson-title">' + 'Les: ' + lessonID + '</h4>';
+						newHTML += '<h4 class="question-lesson-title">' + 'Les: ' + lessonX.Lesson + '</h4>';
 
 						let questionID = 1;
+
+						if (questions.length > 0) {
+							bHasAnyQuestion = true;
+						}
+
 						for (const questionX of questions) {
+
 							newHTML += '<fieldset class="fieldstyle">';
 
 							const legend = '<legend>' + questionID + '.</legend>';
@@ -219,7 +250,11 @@ const App = (() => {
 						}
 
 						newHTML += "</div>";
-						lessonID++;
+					}
+
+					if (!bHasAnyQuestion) {
+						console.log("Aborting request, there are no questions.");
+						return false;
 					}
 
 					_eQuestionFieldsWrap.insertAdjacentHTML('afterbegin', newHTML);
@@ -243,32 +278,54 @@ const App = (() => {
 				let fileReader = new FileReader();
 				fileReader.onload = function(e) {
 					_eTextareaCreationInput.value = e.target.result;
-					_UpdateParameterWidgets();
+					_UpdateJSONCache();
 				};
 				fileReader.readAsText(selectedFile);
 			}); 
 
-			// Update parameters when JSON input changes.
+			// Update parameters when something relevant changes.
 
 			_eTextareaCreationInput.addEventListener("input", function() {
-				_UpdateParameterWidgets();
+				_UpdateJSONCache();
+			}); 
+
+			_eNumberStartAtLesson.addEventListener("input", function() {
+				// Clamp between min (1) and max (amount of lessons);
+				const maxLen = _json.Lessons ? _json.Lessons.length : 1;
+				_eNumberStartAtLesson.value = Math.max(1, Math.min(maxLen, _eNumberStartAtLesson.value));
+				// Drag along _eNumberEndAtLesson.
+				if (parseInt(_eNumberEndAtLesson.value) < parseInt(_eNumberStartAtLesson.value)) {
+					_eNumberEndAtLesson.value = _eNumberStartAtLesson.value;
+				}
+			}); 
+
+			_eNumberEndAtLesson.addEventListener("input", function() {
+				// Clamp between min (1) and max (amount of lessons);
+				const maxLen = _json.Lessons ? _json.Lessons.length : 1;
+				_eNumberEndAtLesson.value = Math.max(1, Math.min(maxLen, _eNumberEndAtLesson.value));
+				// Drag along _eNumberStartAtLesson.
+				if (parseInt(_eNumberStartAtLesson.value) > parseInt(_eNumberEndAtLesson.value)) {
+					_eNumberStartAtLesson.value = _eNumberEndAtLesson.value;
+				}
 			}); 
 
 			// Update state
 
-			_UpdateParameterWidgets();
+			_UpdateJSONCache();
 		};
 
-		const _UpdateParameterWidgets = function() {
-			// console.log("Updating creation parameter widgets.");
-			const json = JSON.parse(_eTextareaCreationInput.value);
-			const lessonAmount = json.Lessons.length;
-			_eNumberEndAtLesson.value = lessonAmount;
-			if (_eNumberStartAtLesson.value > _eNumberEndAtLesson.value) {
-				_eNumberStartAtLesson.value = _eNumberEndAtLesson.value;
-			}
+		const _UpdateJSONCache = function() {
+			_json = JSON.parse(_eTextareaCreationInput.value);
+			console.log(_json);
+			_UpdateParameterWidgetsToJSON();
 		}
-		
+
+		const _UpdateParameterWidgetsToJSON = function() {
+			_eNumberStartAtLesson.value = 1;
+			const maxLen = _json.Lessons ? _json.Lessons.length : 1;
+			_eNumberEndAtLesson.value = Math.max(1, maxLen);
+		}
+
 		/* Public */
 		
 		return {
