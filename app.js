@@ -260,6 +260,7 @@ const App = (() => {
 					_eQuestionFieldsWrap.insertAdjacentHTML('afterbegin', newHTML);
 
 					Navigation.NavigateTo(1);
+					window.scrollTo({top: 0, behavior: 'smooth'})
 					Navigation.UpdateTabVisibility();
 
 					return false;
@@ -572,20 +573,20 @@ const App = (() => {
 					UIUtils.UpdateVisibility(_eCreationContent, true);
 					UIUtils.UpdateVisibility(_eQuestionContent, false);
 					ResultsOverlay.HideResults();
-				break;
+					break;
 				case 1:
 					// Navigate to questions, do not show results.
 					UIUtils.UpdateVisibility(_eCreationContent, false);
 					UIUtils.UpdateVisibility(_eQuestionContent, true);
 					ResultsOverlay.HideResults();
-				break;
+					break;
 				case 2:
 					// Navigate to questions, show results.
 					UIUtils.UpdateVisibility(_eCreationContent, false);
 					UIUtils.UpdateVisibility(_eQuestionContent, true);
 					ResultsOverlay.UpdateProgressWidgets();
 					ResultsOverlay.ShowResults();
-				break;
+					break;
 				default:
 					console.log("Navigation error, this contentId is not used.");
 					return;
