@@ -316,9 +316,14 @@ const App = (() => {
 		};
 
 		const _UpdateJSONCache = function() {
-			_json = JSON.parse(_eTextareaCreationInput.value);
-			console.log(_json);
-			_UpdateParameterWidgetsToJSON();
+			try {
+				_json = JSON.parse(_eTextareaCreationInput.value);
+				console.log(_json);
+				_UpdateParameterWidgetsToJSON();
+			} 
+			catch (error) {
+				console.error(error);
+			}
 		}
 
 		const _UpdateParameterWidgetsToJSON = function() {
