@@ -132,14 +132,12 @@ const App = (() => {
 					e.preventDefault();
 
 					const formData = new FormData(e.target);
+					const bShowQuestionsWithInvalidAnswers = formData.get("creation-show-questions-with-invalid-answers") === 'on';
 					const bShuffleQuestions = formData.get("creation-shuffle-questions") === 'on';
 					const bMixLessons = formData.get("creation-mix-lessons") === 'on';
 
 					// Empty any present questions on the question form, since they will be created from the new data.
 					_eQuestionFieldsWrap.innerHTML = "";
-					let newHTML = '';
-
-					let bHasAnyQuestion = false;
 
 					lessons = [];
 					const startAtLesson = parseInt(_eNumberStartAtLesson.value);
@@ -171,7 +169,12 @@ const App = (() => {
 						lessons.push(mixedLesson);
 					}
 
+					let bHasAnyLessonToShow = false;
+					let newHTML = '';
+
 					for (const lessonX of lessons) {
+						let bLessonHasAnyQuestionsToShow = false;
+						const lessonTitle = StringUtils.StripHTML(lessonX.Lesson);
 						let questions = lessonX.Questions;
 
 						if (bShuffleQuestions) {
@@ -182,24 +185,25 @@ const App = (() => {
 						// console.log("Processed questions:");
 						// console.log(questions);
 
-						newHTML += '<div class="question-lesson-wrap">';
-						newHTML += '<h4 class="question-lesson-title">' + 'Les: ' + lessonX.Lesson + '</h4>';
-
 						let questionID = 1;
-
-						if (questions.length > 0) {
-							bHasAnyQuestion = true;
-						}
+						let lessonHTML = "";
 
 						for (const questionX of questions) {
+							if (questionX.RightAnswers.length == 0 || questionX.WrongAnswers.length == 0) {
+								if (!bShowQuestionsWithInvalidAnswers) {
+									console.log("skipped question with invalid answers");
+									continue;
+								}
+							}
+							bLessonHasAnyQuestionsToShow = true;
 
-							newHTML += '<fieldset class="fieldstyle">';
+							lessonHTML += '<fieldset class="fieldstyle">';
 
 							const legend = '<legend>' + questionID + '.</legend>';
-							newHTML += legend;
+							lessonHTML += legend;
 
 							const Description = '<p class="question-description">' + StringUtils.StripHTML(questionX.Question) + '</p>';
-							newHTML += Description;
+							lessonHTML += Description;
 
 							let answers = []; 
 
@@ -227,33 +231,40 @@ const App = (() => {
 
 							let answerIndex = 0;
 							for (const answerX of answers) {
-								newHTML += '<div class="row"><div class="col-12">';
+								lessonHTML += '<div class="row"><div class="col-12">';
 
-								const answerID = 'radio-question-' + questionID + '-answer-' + answerIndex;
+								const answerID = 'radio-lesson-' + lessonTitle + '-question-' + questionID + '-answer-' + answerIndex;
 								const answerType = questionX.RightAnswers.includes(answerX) ? 'right-answer' : 'wrong-answer';
 
 								const answerString = '<input type="' + inputType + '" id="' + answerID + '" name="question-' + questionID + '-answer" class="' + answerType +'" value="' + answerIndex + '"></input>';
-								newHTML += answerString;
+								lessonHTML += answerString;
 								const answerlabel = '<label for="' + answerID + '">' + StringUtils.StripHTML(answerX) + '</label>';
-								newHTML += answerlabel;
+								lessonHTML += answerlabel;
 
-								newHTML += '</div></div>';
+								lessonHTML += '</div></div>';
 								answerIndex++;
 							}
 
 							if (questionX.Note) {
-								newHTML += '<p class="result-answer-note">Note: ' + questionX.Note + '</p>';
+								lessonHTML += '<p class="result-answer-note">Note: ' + questionX.Note + '</p>';
 							}
 
-							newHTML += '</fieldset>';
+							lessonHTML += '</fieldset>';
 							questionID++;
 						}
 
-						newHTML += "</div>";
+						if (bLessonHasAnyQuestionsToShow) {
+							newHTML += '<div class="question-lesson-wrap">';
+							newHTML += '<h4 class="question-lesson-title">' + 'Les: ' + lessonTitle + '</h4>';
+							newHTML += lessonHTML;
+							newHTML += "</div>";
+
+							bHasAnyLessonToShow = true;
+						}
 					}
 
-					if (!bHasAnyQuestion) {
-						console.log("Aborting request, there are no questions.");
+					if (!bHasAnyLessonToShow) {
+						console.log("Aborting request, there is nothing to show.");
 						return false;
 					}
 
