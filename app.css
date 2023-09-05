@@ -124,21 +124,62 @@ hr {
 	border-radius: 15px;
 	margin-top: 15px;
 	margin-bottom: 15px;
-	border: thin solid #226f8d;
+	padding-left: 15px;
+	padding-right: 15px;
+	border: thin solid #cbcbcb;
 }
 #progress-bar.active {
-	display: flex;
+	display: block;
 }
 
 .progress-element {
-	display: inline-block;
 	/* background-color: #384757; */
 	color: white;
 	font-size: 16px;
-	border-radius: 4px;
-	flex: 1;
 	text-align: center;
-	min-height: 50px;
+}
+
+#progress-date-information {
+	border-bottom-left-radius: 15px;
+	border-bottom-right-radius: 15px;
+ 	background-color: #384757;
+	padding: 5px;
+}
+
+#progress-start-date {
+	
+}
+
+#progress-end-date {
+	
+}
+
+#progress-date-bar {
+	text-align: center;
+	background-color: #181e18;
+	border: thin solid #226f8d;
+	border-radius: 15px;
+	position: relative;
+}
+
+#progress-date-bar-inner {
+	background-color: #226f8d;
+	height: 30px;
+  	border-radius: 15px;
+	border-top: thin solid #cbcbcb;
+	border-right: thin solid #cbcbcb;
+	border-bottom: thin solid #cbcbcb;
+	border-left: thin solid #cbcbcb;
+}
+
+#progress-date-bar-text {
+	margin: 0;
+	padding: 5px;
+	position: absolute;
+	width: 100%;
+	top: 0;
+	font-size: 12px;
+  	opacity: 75%;
 }
 
 #bottom-bar {

@@ -1,150 +1,147 @@
 /**[[ Copyright Roy Wierer (Seda145) ]]**/
 
 
-const App = (() => {
+class UIUtils {
 
-	const UIUtils = (() => {
+	/* Functions */
 
-		/* Functions */
-
-		const _UpdateVisibility = function(InElem, InbShow) {
-			if (!InElem) {
-				console.log("UIUtils.UpdateVisibility: invalid InElem.");
-				return;
-			}
-			if (InbShow) {
-				InElem.classList.remove("hide");
-			}
-			else {
-				InElem.classList.add("hide");
-			}
-		};
-
-		/* Public */
-		
-		return {
-			/* Functions */
-			UpdateVisibility : _UpdateVisibility,
-		};
-		
-	})();
-
-
-	const MathUtils = (() => {
-		/* Functions */
-
-		const _Random = function() {
-			// TODO seedable math generator
-			return Math.random();
+	static updateVisibility(inElem, bInShow) {
+		if (!inElem) {
+			console.log("UIUtils.updateVisibility: invalid inElem.");
+			return;
 		}
-
-		const _GetRandomInteger = function(InMin, InMax) {
-			return Math.floor(MathUtils.Random() * (InMax - InMin + 1)) + InMin;
+		if (bInShow) {
+			inElem.classList.remove("hide");
 		}
-
-		/* Public */
-
-		return {
-			/* Functions */
-			Random : _Random,
-			GetRandomInteger : _GetRandomInteger,
-		};
-
-	})();
-
-	
-	const StringUtils = (() => {
-		const _StripEmptyNewLines = function(InString) {
-			return InString.replace(/(?:(?:\r\n|\r|\n)\s*){2}/gm, "\r\n");
+		else {
+			inElem.classList.add("hide");
 		}
+	}
+}
 
-		const _StripHTML = function(InString) {
-			return InString.replace(/<\/?[^>]+(>|$)/g, "");
-		};
 
-		/* Public */
-		
-		return {
-			/* Functions */
-			StripEmptyNewLines : _StripEmptyNewLines, 
-			StripHTML : _StripHTML, 
-		};
-		
-	})();
-	
+class StringUtils {
+	static stripHTML(inString) {
+		return inString.replace(/<\/?[^>]+(>|$)/g, "");
+	}
+}
 
-	const CreationForm = (() => {
-		/* State */
 
-		// Cache JSON so we don't have to parse it every request.
-		let _json = {};
+class Cache {
+	constructor() {
+		// State
+		this.JSON = {};
+		this.JSONFileReader = new FileReader();
+		// Events
+		this.onJSONUpdated = new Event("cache-on-json-updated");
+		// Elements
+		this.eTabs = document.getElementById("tabs");
+		this.eCreationContent = document.getElementById("creation-content");
+		this.eCreationForm = document.getElementById("creation-form");
+		this.eTextareaCreationInput = document.getElementById("textarea-creation-input");
+		this.eQuestionForm = document.getElementById("question-form");
+		this.eQuestionContent = document.getElementById("question-content");
+		this.eQuestionFieldsWrap = document.getElementById("question-fields-wrap");
+		this.eQuestionInteractionBlocker = document.getElementById("question-interaction-blocker");
+		this.eProgressBar = document.getElementById("progress-bar");
+		this.eProgressAnsweredQuestionsCounter = document.getElementById("progress-answered-questions-counter");
+		this.eProgressTotalScore = document.getElementById("progress-total-score");
+		this.eProgressScoreToTen = document.getElementById("progress-score-to-ten");
+		// this.eProgressStartDate = document.getElementById("progress-start-date");
+		// this.eProgressEndDate = document.getElementById("progress-end-date");
+		this.eProgressDateBarInner = document.getElementById("progress-date-bar-inner");
+		this.eProgressDateBarText = document.getElementById("progress-date-bar-text");
+		this.eButtonInjectFile = document.getElementById("creation-form-button-inject-file");
+		this.eNumberStartAtLesson = document.getElementById("creation-form-number-start-at-lesson");
+		this.eNumberEndAtLesson	= document.getElementById("creation-form-number-end-at-lesson");
 
-		/* Elements */
+		this.debugValidity();
 
-		let _eCreationForm;
-		let _eTextareaCreationInput;
-		let _eQuestionFieldsWrap;
-		// Injection buttons
-		let _eButtonInjectFile;
-		// Parameter widgets
-		let _eNumberStartAtLesson;
-		let _eNumberEndAtLesson;
-		
-		/* Functions */
+		// Setup
 
-		const _IsValid = function() {
-			if (!_eCreationForm 
-				|| !_eTextareaCreationInput
-				|| !_eQuestionFieldsWrap
-				// Injection buttons
-				|| !_eButtonInjectFile
-				// Parameter widgets
-				|| !_eNumberStartAtLesson
-				|| !_eNumberEndAtLesson
-				) {
-				console.log("invalid form element(s).");
-				return false;
-			}
-			return true;
-		};
+		this.eTextareaCreationInput.addEventListener("change", () => {
+			this.updateJSONCache();
+		}); 
 
-		const _SetElementVariables = function() {
-			_eCreationForm = document.getElementById("creation-form");
-			_eTextareaCreationInput = document.getElementById("textarea-creation-input");
-			_eQuestionFieldsWrap = document.getElementById("question-fields-wrap");
-			// Injection buttons
-			_eButtonInjectFile = document.getElementById("creation-form-button-inject-file");
-			// Parameter widgets
-			_eNumberStartAtLesson = document.getElementById("creation-form-number-start-at-lesson");
-			_eNumberEndAtLesson = document.getElementById("creation-form-number-end-at-lesson");
-		};
+		this.eTextareaCreationInput.addEventListener("input", () => {
+			this.updateJSONCache();
+		}); 
 
-		const _Register = function() {
-			_SetElementVariables();
-			if (!_IsValid()) {
-				return;
-			}
+		this.updateJSONCache();
+	}
 
-			// Override form submit.
-			_eCreationForm.addEventListener(
-				"submit",
-				function (e) {
-					e.preventDefault();
+	debugValidity() {
+		const bIsValid = (
+			this.eTabs
+			&& this.eCreationContent
+			&& this.eCreationForm 
+			&& this.eTextareaCreationInput
+			&& this.eQuestionForm 
+			&& this.eQuestionContent
+			&& this.eQuestionFieldsWrap
+			&& this.eQuestionInteractionBlocker
+			&& this.eProgressBar
+			&& this.eProgressAnsweredQuestionsCounter
+			&& this.eProgressTotalScore
+			&& this.eProgressScoreToTen
+			// && this.eProgressStartDate
+			// && this.eProgressEndDate
+			&& this.eProgressDateBarInner
+			&& this.eProgressDateBarText
+			&& this.eButtonInjectFile
+			&& this.eNumberStartAtLesson
+			&& this.eNumberEndAtLesson
+		);
 
-					const formData = new FormData(e.target);
-					const bShowQuestionsWithInvalidAnswers = formData.get("creation-show-questions-with-invalid-answers") === 'on';
-					const bShuffleQuestions = formData.get("creation-shuffle-questions") === 'on';
-					const bMixLessons = formData.get("creation-mix-lessons") === 'on';
+		if (!bIsValid) {
+			console.log("Elements are invalid!");
+		}
+	}
 
-					// Empty any present questions on the question form, since they will be created from the new data.
-					_eQuestionFieldsWrap.innerHTML = "";
+	updateJSONCache() {
+		try {
+			this.JSON = JSON.parse(this.eTextareaCreationInput.value);
+			document.dispatchEvent(this.onJSONUpdated);
+			console.log("Updated json cache.");
+		} 
+		catch (error) {
+			console.error(error);
+		}
+	}
+}
 
-					lessons = [];
-					const startAtLesson = parseInt(_eNumberStartAtLesson.value);
-					const endAtLesson = parseInt(_eNumberEndAtLesson.value);
 
+class CreationForm {
+	constructor() {
+		document.addEventListener(
+			"cache-on-json-updated",
+			(e) => {
+				this.updateParameterWidgetsToJSON();
+			},
+			false,
+		);
+
+		// Override form submit.
+		App.Cache.eCreationForm.addEventListener(
+			"submit",
+			(e) => {
+				e.preventDefault();
+
+				const formData = new FormData(e.target);
+				const bShowQuestionsWithInvalidAnswers = formData.get("creation-show-questions-with-invalid-answers") === 'on';
+				const bShuffleQuestions = formData.get("creation-shuffle-questions") === 'on';
+				const bMixLessons = formData.get("creation-mix-lessons") === 'on';
+				
+				// Empty any present questions on the question form, since they will be created from the new data.
+				App.Cache.eQuestionFieldsWrap.innerHTML = "";
+
+				let lessons = [];
+				const startAtLesson = parseInt(App.Cache.eNumberStartAtLesson.value);
+				const endAtLesson = parseInt(App.Cache.eNumberEndAtLesson.value);
+
+				{
 					let lessonID = 1;
-					for (const lessonX of _json.Lessons) {
+					for (const lessonX of App.Cache.JSON.Lessons) {
 						if (lessonID < startAtLesson) {
 							lessonID++;
 							continue;
@@ -155,506 +152,369 @@ const App = (() => {
 						lessons.push(lessonX);
 						lessonID++;
 					}
+				}
 
-					if (bMixLessons) {
-						// console.log("Mixing lessons.");
-						let mixedLesson = {};
-						mixedLesson.Lesson = "Mix";
-						mixedLesson.Questions = [];
-						for (const lessonX of lessons) {
-							mixedLesson.Questions = mixedLesson.Questions.concat(lessonX.Questions);
-						}
-
-						lessons = [];
-						lessons.push(mixedLesson);
-					}
-
-					let bHasAnyLessonToShow = false;
-					let newHTML = '';
-
+				if (bMixLessons) {
+					// console.log("Mixing lessons.");
+					let mixedLesson = {};
+					mixedLesson.Lesson = "Mix";
+					mixedLesson.Questions = [];
 					for (const lessonX of lessons) {
-						let bLessonHasAnyQuestionsToShow = false;
-						const lessonTitle = StringUtils.StripHTML(lessonX.Lesson);
-						let questions = lessonX.Questions;
-
-						if (bShuffleQuestions) {
-							questions.sort(() => Math.random() > 0.5);
-							// console.log("Shuffling questions.");
-						}
-
-						// console.log("Processed questions:");
-						// console.log(questions);
-
-						let questionID = 1;
-						let lessonHTML = "";
-
-						for (const questionX of questions) {
-							if (questionX.RightAnswers.length == 0 || questionX.WrongAnswers.length == 0) {
-								if (!bShowQuestionsWithInvalidAnswers) {
-									console.log("skipped question with invalid answers");
-									continue;
-								}
-							}
-							bLessonHasAnyQuestionsToShow = true;
-
-							lessonHTML += '<fieldset class="fieldstyle">';
-
-							const legend = '<legend>' + questionID + '.</legend>';
-							lessonHTML += legend;
-
-							const Description = '<p class="question-description">' + StringUtils.StripHTML(questionX.Question) + '</p>';
-							lessonHTML += Description;
-
-							let answers = []; 
-
-							// If this is a "True or False" question. Always make True appear first to not disorient the reader.
-							if (questionX.RightAnswers.length == 1
-								&& questionX.WrongAnswers.length == 1
-								) {
-								if (questionX.RightAnswers[0] == "True") {
-									answers.push(questionX.RightAnswers[0]);
-									answers.push(questionX.WrongAnswers[0]);
-								}
-								else {
-									answers.push(questionX.WrongAnswers[0]);
-									answers.push(questionX.RightAnswers[0]);
-								}
-							}
-
-							// Otherwise merge both arrays and shuffle.
-							if (answers.length == 0) {
-								answers = questionX.RightAnswers.concat(questionX.WrongAnswers);
-								answers.sort(() => Math.random() > 0.5);
-							}
-							
-							const inputType = questionX.RightAnswers.length > 1 ? 'checkbox' : 'radio';
-
-							let answerIndex = 0;
-							for (const answerX of answers) {
-								lessonHTML += '<div class="row"><div class="col-12">';
-
-								const answerID = 'radio-lesson-' + lessonTitle + '-question-' + questionID + '-answer-' + answerIndex;
-								const answerType = questionX.RightAnswers.includes(answerX) ? 'right-answer' : 'wrong-answer';
-
-								const answerString = '<input type="' + inputType + '" id="' + answerID + '" name="question-' + questionID + '-answer" class="' + answerType +'" value="' + answerIndex + '"></input>';
-								lessonHTML += answerString;
-								const answerlabel = '<label for="' + answerID + '">' + StringUtils.StripHTML(answerX) + '</label>';
-								lessonHTML += answerlabel;
-
-								lessonHTML += '</div></div>';
-								answerIndex++;
-							}
-
-							if (questionX.Note) {
-								lessonHTML += '<p class="result-answer-note">Note: ' + questionX.Note + '</p>';
-							}
-
-							lessonHTML += '</fieldset>';
-							questionID++;
-						}
-
-						if (bLessonHasAnyQuestionsToShow) {
-							newHTML += '<div class="question-lesson-wrap">';
-							newHTML += '<h4 class="question-lesson-title">' + 'Les: ' + lessonTitle + '</h4>';
-							newHTML += lessonHTML;
-							newHTML += "</div>";
-
-							bHasAnyLessonToShow = true;
-						}
+						mixedLesson.Questions = mixedLesson.Questions.concat(lessonX.Questions);
 					}
 
-					if (!bHasAnyLessonToShow) {
-						console.log("Aborting request, there is nothing to show.");
-						return false;
+					lessons = [];
+					lessons.push(mixedLesson);
+				}
+
+				let bHasAnyLessonToShow = false;
+				let newHTML = '';
+
+				for (const lessonX of lessons) {
+					let bLessonHasAnyQuestionsToShow = false;
+					const lessonTitle = StringUtils.stripHTML(lessonX.Lesson);
+					let questions = lessonX.Questions;
+
+					if (bShuffleQuestions) {
+						questions.sort(() => Math.random() > 0.5);
+						// console.log("Shuffling questions.");
 					}
 
-					_eQuestionFieldsWrap.insertAdjacentHTML('afterbegin', newHTML);
+					// console.log("Processed questions:");
+					// console.log(questions);
 
-					Navigation.NavigateTo(1);
-					window.scrollTo({top: 0, behavior: 'smooth'})
-					Navigation.UpdateTabVisibility();
+					let questionID = 1;
+					let lessonHTML = "";
 
+					for (const questionX of questions) {
+						if (questionX.RightAnswers.length == 0 || questionX.WrongAnswers.length == 0) {
+							if (!bShowQuestionsWithInvalidAnswers) {
+								console.log("skipped question with invalid answers");
+								continue;
+							}
+						}
+						bLessonHasAnyQuestionsToShow = true;
+
+						lessonHTML += '<fieldset class="fieldstyle">';
+
+						const legend = '<legend>' + questionID + '.</legend>';
+						lessonHTML += legend;
+
+						const Description = '<p class="question-description">' + StringUtils.stripHTML(questionX.Question) + '</p>';
+						lessonHTML += Description;
+
+						let answers = []; 
+
+						// If this is a "True or False" question. Always make True appear first to not disorient the reader.
+						if (questionX.RightAnswers.length == 1
+							&& questionX.WrongAnswers.length == 1
+							) {
+							if (questionX.RightAnswers[0] == "True") {
+								answers.push(questionX.RightAnswers[0]);
+								answers.push(questionX.WrongAnswers[0]);
+							}
+							else {
+								answers.push(questionX.WrongAnswers[0]);
+								answers.push(questionX.RightAnswers[0]);
+							}
+						}
+
+						// Otherwise merge both arrays and shuffle.
+						if (answers.length == 0) {
+							answers = questionX.RightAnswers.concat(questionX.WrongAnswers);
+							answers.sort(() => Math.random() > 0.5);
+						}
+						
+						const inputType = questionX.RightAnswers.length > 1 ? 'checkbox' : 'radio';
+
+						let answerIndex = 0;
+						for (const answerX of answers) {
+							lessonHTML += '<div class="row"><div class="col-12">';
+
+							const answerID = 'radio-lesson-' + lessonTitle + '-question-' + questionID + '-answer-' + answerIndex;
+							const answerType = questionX.RightAnswers.includes(answerX) ? 'right-answer' : 'wrong-answer';
+
+							const answerString = '<input type="' + inputType + '" id="' + answerID + '" name="question-' + questionID + '-answer" class="' + answerType +'" value="' + answerIndex + '"></input>';
+							lessonHTML += answerString;
+							const answerlabel = '<label for="' + answerID + '">' + StringUtils.stripHTML(answerX) + '</label>';
+							lessonHTML += answerlabel;
+
+							lessonHTML += '</div></div>';
+							answerIndex++;
+						}
+
+						if (questionX.Note) {
+							lessonHTML += '<p class="result-answer-note">Note: ' + questionX.Note + '</p>';
+						}
+
+						lessonHTML += '</fieldset>';
+						questionID++;
+					}
+
+					if (bLessonHasAnyQuestionsToShow) {
+						newHTML += '<div class="question-lesson-wrap">';
+						newHTML += '<h4 class="question-lesson-title">' + 'Les: ' + lessonTitle + '</h4>';
+						newHTML += lessonHTML;
+						newHTML += "</div>";
+
+						bHasAnyLessonToShow = true;
+					}
+				}
+
+				if (!bHasAnyLessonToShow) {
+					console.log("Aborting request, there is nothing to show.");
 					return false;
-				},
-				false
-			);
-
-			// Bind injection button functionality.
-
-			_eButtonInjectFile.addEventListener("change", function() {
-				if (_eButtonInjectFile.files.length == 0) {
-					return;
 				}
-				const selectedFile = _eButtonInjectFile.files[0];
 
-				let fileReader = new FileReader();
-				fileReader.onload = function(e) {
-					_eTextareaCreationInput.value = e.target.result;
-					_UpdateJSONCache();
-				};
-				fileReader.readAsText(selectedFile);
-			}); 
+				App.Cache.eQuestionFieldsWrap.insertAdjacentHTML('afterbegin', newHTML);
 
-			// Update parameters when something relevant changes.
+				App.Navigation.navigateTo(1);
+				window.scrollTo({top: 0, behavior: 'smooth'})
+				App.Navigation.updateTabVisibility();
 
-			_eTextareaCreationInput.addEventListener("input", function() {
-				_UpdateJSONCache();
-			}); 
-
-			_eNumberStartAtLesson.addEventListener("input", function() {
-				// Clamp between min (1) and max (amount of lessons);
-				const maxLen = _json.Lessons ? _json.Lessons.length : 1;
-				_eNumberStartAtLesson.value = Math.max(1, Math.min(maxLen, _eNumberStartAtLesson.value));
-				// Drag along _eNumberEndAtLesson.
-				if (parseInt(_eNumberEndAtLesson.value) < parseInt(_eNumberStartAtLesson.value)) {
-					_eNumberEndAtLesson.value = _eNumberStartAtLesson.value;
-				}
-			}); 
-
-			_eNumberEndAtLesson.addEventListener("input", function() {
-				// Clamp between min (1) and max (amount of lessons);
-				const maxLen = _json.Lessons ? _json.Lessons.length : 1;
-				_eNumberEndAtLesson.value = Math.max(1, Math.min(maxLen, _eNumberEndAtLesson.value));
-				// Drag along _eNumberStartAtLesson.
-				if (parseInt(_eNumberStartAtLesson.value) > parseInt(_eNumberEndAtLesson.value)) {
-					_eNumberStartAtLesson.value = _eNumberEndAtLesson.value;
-				}
-			}); 
-
-			// Update state
-
-			_UpdateJSONCache();
-		};
-
-		const _UpdateJSONCache = function() {
-			try {
-				_json = JSON.parse(_eTextareaCreationInput.value);
-				console.log(_json);
-				_UpdateParameterWidgetsToJSON();
-			} 
-			catch (error) {
-				console.error(error);
-			}
-		}
-
-		const _UpdateParameterWidgetsToJSON = function() {
-			_eNumberStartAtLesson.value = 1;
-			const maxLen = _json.Lessons ? _json.Lessons.length : 1;
-			_eNumberEndAtLesson.value = Math.max(1, maxLen);
-		}
-
-		/* Public */
-		
-		return {
-		  /* Functions */
-		  Register : _Register
-		};
-	
-	})();
-
-
-	const QuestionForm = (() => {
-		/* Elements */
-
-		let _eQuestionForm;
-		let _eQuestionFieldsWrap;
-		let _eProgressAnsweredQuestionsCounter;
-		let _eProgressTotalScore;
-		
-		/* Functions */
-
-		const _IsValid = function() {
-			if (!_eQuestionForm 
-				|| !_eQuestionFieldsWrap
-				|| !_eProgressAnsweredQuestionsCounter
-				|| !_eProgressTotalScore
-				) {
-				console.log("invalid form element(s).");
 				return false;
-			}
-			return true;
-		};
+			},
+			false
+		);
 
-		const _SetElementVariables = function() {
-			_eQuestionForm = document.getElementById("question-form");
-			_eQuestionFieldsWrap = document.getElementById("question-fields-wrap");
-			_eProgressAnsweredQuestionsCounter = document.getElementById("progress-answered-questions-counter");
-			_eProgressTotalScore = document.getElementById("progress-total-score");
-		};
+		// Bind injection button functionality.
 
-		const _Register = function() {
-			_SetElementVariables();
-			if (!_IsValid()) {
+		App.Cache.eButtonInjectFile.addEventListener("change", () => {
+			if (App.Cache.eButtonInjectFile.files.length == 0) {
 				return;
 			}
+			const selectedFile = App.Cache.eButtonInjectFile.files[0];
 
-			// Override form submit.
-			_eQuestionForm.addEventListener(
-				"submit",
-				function (e) {
-					e.preventDefault();
-					const formData = new FormData(_eQuestionForm);
+			App.Cache.JSONFileReader.onload = (e) => {
+				App.Cache.eTextareaCreationInput.value = e.target.result;
+				let changeEvent = new Event('change', { bubbles: true });
+				App.Cache.eTextareaCreationInput.dispatchEvent(changeEvent);
+			};
+			App.Cache.JSONFileReader.readAsText(selectedFile);
+		}); 
 
-					// DOSTUFF
-					console.log("Question form posts data:");
-					console.log(formData);
+		// Update parameters when something relevant changes.
 
-					Navigation.NavigateTo(2);
+		App.Cache.eNumberStartAtLesson.addEventListener("input", () => {
+			// Clamp between min (1) and max (amount of lessons);
+			const maxLen = App.Cache.JSON.Lessons ? App.Cache.JSON.Lessons.length : 1;
+			App.Cache.eNumberStartAtLesson.value = Math.max(1, Math.min(maxLen, App.Cache.eNumberStartAtLesson.value));
+			// Drag along eNumberEndAtLesson.
+			if (parseInt(App.Cache.eNumberEndAtLesson.value) < parseInt(App.Cache.eNumberStartAtLesson.value)) {
+				App.Cache.eNumberEndAtLesson.value = App.Cache.eNumberStartAtLesson.value;
+			}
+		}); 
 
-					return false;
-				},
-				false
-			);
-		};
-		
-		/* Public */
-		
-		return {
-			/* Elements */
-			QuestionFieldsWrap : _eQuestionFieldsWrap,
-			/* Functions */
-			IsValid : _IsValid,
-			Register : _Register
-		};
-	
-	})();
+		App.Cache.eNumberEndAtLesson.addEventListener("input", () => {
+			// Clamp between min (1) and max (amount of lessons);
+			const maxLen = App.Cache.JSON.Lessons ? App.Cache.JSON.Lessons.length : 1;
+			App.Cache.eNumberEndAtLesson.value = Math.max(1, Math.min(maxLen, App.Cache.eNumberEndAtLesson.value));
+			// Drag along eNumberStartAtLesson.
+			if (parseInt(App.Cache.eNumberStartAtLesson.value) > parseInt(App.Cache.eNumberEndAtLesson.value)) {
+				App.Cache.eNumberStartAtLesson.value = App.Cache.eNumberEndAtLesson.value;
+			}
+		}); 
+	}
 
 
-	const ResultsOverlay = (() => {
-		/* Elements */
+	updateParameterWidgetsToJSON() {
+		App.Cache.eNumberStartAtLesson.value = 1;
+		const maxLen = App.Cache.JSON.Lessons ? App.Cache.JSON.Lessons.length : 1;
+		App.Cache.eNumberEndAtLesson.value = Math.max(1, maxLen);
+	}
+}
 
-		let _eQuestionContent;
-		let _eQuestionFieldsWrap;
-		let _eQuestionInteractionBlocker;
-		let _eProgressBar;
-		let _eProgressAnsweredQuestionsCounter;
-		let _eProgressTotalScore;
-		let _eProgressScoreToTen;
 
-		/* Functions */
+class QuestionForm {
+	constructor() {
+		// Override form submit.
+		App.Cache.eQuestionForm.addEventListener(
+			"submit",
+			(e) => {
+				e.preventDefault();
+				const formData = new FormData(Cache.eQuestionForm);
 
-		const _IsValid = function() {
-			if (!_eQuestionContent
-				|| !_eQuestionFieldsWrap
-				|| !_eQuestionInteractionBlocker
-				|| !_eProgressBar
-				|| !_eProgressAnsweredQuestionsCounter
-				|| !_eProgressTotalScore
-				|| !_eProgressScoreToTen
-				) {
-				console.log("invalid ResultsUI element(s).");
+				console.log("Question form posts data:");
+				console.log(formData);
+
+				App.Navigation.navigateTo(2);
+
 				return false;
-			}
-			return true;
-		};
+			},
+			false
+		);
+	}
+}
 
-		const _SetElementVariables = function() {
-			_eQuestionContent = document.getElementById("question-content");
-			_eQuestionFieldsWrap = document.getElementById("question-fields-wrap");
-			_eQuestionInteractionBlocker = document.getElementById("question-interaction-blocker");
-			_eProgressBar = document.getElementById("progress-bar");
-			_eProgressAnsweredQuestionsCounter = document.getElementById("progress-answered-questions-counter");
-			_eProgressTotalScore = document.getElementById("progress-total-score");
-			_eProgressScoreToTen = document.getElementById("progress-score-to-ten");
-		};
 
-		const _Register = function() {
-			_SetElementVariables();
-			if (!_IsValid()) {
-				return false;
-			}
+class ResultsOverlay {
+	constructor() {
+		// When the question interaction blocker is clicked, navigate from results back to questions (it unblocks interaction, which was blocked to show results.).
+		App.Cache.eQuestionInteractionBlocker.addEventListener("click", () => {
+			App.Navigation.navigateTo(1);
+		}); 
+	}
 
-			// When the question interaction blocker is clicked, navigate from results back to questions (it unblocks interaction, which was blocked to show results.).
-			_eQuestionInteractionBlocker.addEventListener("click", function() {
-				Navigation.NavigateTo(1);
-			}); 
-		};
+	showResults() {
+		App.Cache.eQuestionContent.classList.add("show-results");
+		App.Cache.eQuestionInteractionBlocker.classList.add("active");
+		App.Cache.eProgressBar.classList.add("active");
+	}
 
-		const _ShowResults = function() {
-			_eQuestionContent.classList.add("show-results");
-			_eQuestionInteractionBlocker.classList.add("active");
-			_eProgressBar.classList.add("active");
-		};
+	hideResults() {
+		App.Cache.eQuestionContent.classList.remove("show-results");
+		App.Cache.eQuestionInteractionBlocker.classList.remove("active");
+		App.Cache.eProgressBar.classList.remove("active");
+	}
 
-		const _HideResults = function() {
-			_eQuestionContent.classList.remove("show-results");
-			_eQuestionInteractionBlocker.classList.remove("active");
-			_eProgressBar.classList.remove("active");
-		};
+	updateProgressWidgets() {
+		const questionFieldSets = App.Cache.eQuestionFieldsWrap.querySelectorAll("fieldset");
+		const questionAmount = questionFieldSets.length;
+		if (questionAmount == 0) {
+			console.log("can't show answers for 0 questions");
+			return;
+		}
 
-		const _UpdateProgressWidgets = function() {
-			const questionFieldSets = _eQuestionFieldsWrap.querySelectorAll("fieldset");
-			const questionAmount = questionFieldSets.length;
-			if (questionAmount == 0) {
-				console.log("can't show answers for 0 questions");
-				return;
-			}
+		// Update dates
 
-			// Gather score data.
+		let startDate = new Date(App.Cache.JSON.StartDate);
+		const endDate = new Date(App.Cache.JSON.EndDate);
+		if (startDate > endDate) {
+			console.log("Clamped start date to be before end date.");
+			startDate = endDate;
+		}
+		let currentDate = new Date();
+		if (currentDate < startDate) {
+			currentDate = startDate;
+			console.log("Clamped current date to be after start date.");
+		}
+		if (currentDate > endDate) {
+			console.log("Clamped current date to be before end date.");
+			currentDate = endDate;
+		}
 
-			let totalScore = 0;
-			let answeredQuestions = 0;
-			for (questionFieldsetX of questionFieldSets) {
-				if (questionFieldsetX.querySelector("input:checked")) {
-					answeredQuestions++;
-				}
-				else {
-					// No input was checked, counting as a mistake.
-					continue;
-				}
+		const daysTowardsStart = Math.abs(startDate.getTime() - currentDate.getTime()) / 86400000;
+		const daysTowardsEnd = Math.abs(endDate.getTime() - currentDate.getTime()) / 86400000;
 
-				if (questionFieldsetX.querySelector("input.wrong-answer:checked")
-					|| questionFieldsetX.querySelector("input.right-answer:not(:checked)")
-					) {
-					// A wrong input was checked, counting as a mistake.
-					continue;
-				}
+		// Percentage towards the end date with 0 decimals.
+		const dateBarPercentage = (daysTowardsStart / (daysTowardsStart + daysTowardsEnd) * 100).toFixed(0);
 
-				totalScore++;
-			}
+		// App.Cache.eProgressStartDate.innerHTML = startDate.toDateString();
+		// App.Cache.eProgressEndDate.innerHTML = endDate.toDateString();
+		App.Cache.eProgressDateBarInner.style.width = dateBarPercentage + "%";
+		App.Cache.eProgressDateBarText.innerHTML = "Started " + daysTowardsStart.toFixed(0) + " days ago, " + daysTowardsEnd.toFixed(0) + " days left.";
 
-			// Update the widgets.
+		// Gather score data.
 
-			_eProgressAnsweredQuestionsCounter.innerHTML = '<p>Answered:</br>' + answeredQuestions + ' / ' + questionAmount + '</p>';
-			_eProgressTotalScore.innerHTML = '<p>Score:</br>' + totalScore + ' / ' + questionAmount + '</p>';
-			let scoreToTen = (totalScore / questionAmount * 10);
-			// Round to 1 decimal:
-			scoreToTen = +scoreToTen.toFixed(1);
-			_eProgressScoreToTen.innerHTML = '<p>Score (0-10):</br>' + scoreToTen + ' / 10</p>';
-		};
-
-		/* Public */
-
-		return {
-			/* Functions */
-			Register : _Register,
-			ShowResults : _ShowResults,
-			HideResults : _HideResults,
-			UpdateProgressWidgets : _UpdateProgressWidgets,
-		};
-		
-	})();
-
-	
-	const Navigation = (() => {
-		/* Elements */
-
-		let _eTabs;
-		let _eCreationContent;
-		let _eQuestionContent;
-		let _eQuestionFieldsWrap;
-		
-		/* Functions */
-
-		const _IsValid = function() {
-			if (!_eTabs
-				|| !_eCreationContent
-				|| !_eQuestionContent
-				|| !_eQuestionFieldsWrap
-				) {
-				console.log("invalid Navigation element(s).");
-				return false;
-			}
-			return true;
-		};
-
-		const _SetElementVariables = function() {
-			_eTabs = document.getElementById("tabs");
-			_eCreationContent = document.getElementById("creation-content");
-			_eQuestionContent = document.getElementById("question-content");
-			_eQuestionFieldsWrap = document.getElementById("question-fields-wrap");
-		};
-
-		const _Register = function() {
-			_SetElementVariables();
-			if (!_IsValid()) {
-				return false;
-			}
-
-			// Listen to when a tab is clicked. On click, navigate to its content id.
-			_eTabs.querySelectorAll(".tab").forEach(function (InElemX) {
-				InElemX.addEventListener(
-					"click",
-					function (e) {
-						_NavigateTo(e.target.dataset.contentid);
-					}
-				);
-			});
-		};
-
-		const _NavigateTo = function(InContentId) {
-			switch (Number(InContentId)) {
-				case 0:
-					// Navigate to question creation, do not show results.
-					UIUtils.UpdateVisibility(_eCreationContent, true);
-					UIUtils.UpdateVisibility(_eQuestionContent, false);
-					ResultsOverlay.HideResults();
-					break;
-				case 1:
-					// Navigate to questions, do not show results.
-					UIUtils.UpdateVisibility(_eCreationContent, false);
-					UIUtils.UpdateVisibility(_eQuestionContent, true);
-					ResultsOverlay.HideResults();
-					break;
-				case 2:
-					// Navigate to questions, show results.
-					UIUtils.UpdateVisibility(_eCreationContent, false);
-					UIUtils.UpdateVisibility(_eQuestionContent, true);
-					ResultsOverlay.UpdateProgressWidgets();
-					ResultsOverlay.ShowResults();
-					break;
-				default:
-					console.log("Navigation error, this contentId is not used.");
-					return;
-			}
-
-			let activeTab = _eTabs.querySelector(".tab.active");
-			if (activeTab) {
-				activeTab.classList.remove("active");
-			}
-			let newTab = _eTabs.querySelector('.tab[data-contentid="' + InContentId + '"]');
-			if (newTab) {
-				newTab.classList.add("active");
-			}
-
-			// console.log("Navigated to InContentId: " + InContentId);
-		};
-
-		const _UpdateTabVisibility = function() {
-			const questionFieldSets = _eQuestionFieldsWrap.querySelectorAll("fieldset");
-			const questionAmount = questionFieldSets.length;
-			if (questionAmount > 0) {
-				_eTabs.classList.remove("hide");
+		let totalScore = 0;
+		let answeredQuestions = 0;
+		for (const questionFieldsetX of questionFieldSets) {
+			if (questionFieldsetX.querySelector("input:checked")) {
+				answeredQuestions++;
 			}
 			else {
-				_eTabs.classList.add("hide");
+				// No input was checked, counting as a mistake.
+				continue;
 			}
-		};
 
-		/* Public */
+			if (questionFieldsetX.querySelector("input.wrong-answer:checked")
+				|| questionFieldsetX.querySelector("input.right-answer:not(:checked)")
+				) {
+				// A wrong input was checked, counting as a mistake.
+				continue;
+			}
 
-		return {
-			/* Functions */
-			IsValid : _IsValid,
-			Register : _Register,
-			NavigateTo : _NavigateTo,
-			UpdateTabVisibility : _UpdateTabVisibility,
-		};
+			totalScore++;
+		}
 
-	})();
+		// Update the widgets.
+
+		App.Cache.eProgressAnsweredQuestionsCounter.innerHTML = '<p>Answered:</br>' + answeredQuestions + ' / ' + questionAmount + '</p>';
+		App.Cache.eProgressTotalScore.innerHTML = '<p>Score:</br>' + totalScore + ' / ' + questionAmount + '</p>';
+		let scoreToTen = (totalScore / questionAmount * 10);
+		// Round to 1 decimal:
+		scoreToTen = +scoreToTen.toFixed(1);
+		App.Cache.eProgressScoreToTen.innerHTML = '<p>Score (0-10):</br>' + scoreToTen + ' / 10</p>';
+	}
+}
 
 
-	/* Module */
+class Navigation {
+	constructor() {
+		// Listen to when a tab is clicked. On click, navigate to its content id.
+		App.Cache.eTabs.querySelectorAll(".tab").forEach((inElemX) => {
+			inElemX.addEventListener(
+				"click",
+				(e) => {
+					this.navigateTo(e.target.dataset.contentid);
+				}
+			);
+		});
+	}
 
-	const _StartModule = (() => {
+	navigateTo(InContentId) {
+		switch (Number(InContentId)) {
+			case 0:
+				// Navigate to question creation, do not show results.
+				UIUtils.updateVisibility(App.Cache.eCreationContent, true);
+				UIUtils.updateVisibility(App.Cache.eQuestionContent, false);
+				App.ResultsOverlay.hideResults();
+				break;
+			case 1:
+				// Navigate to questions, do not show results.
+				UIUtils.updateVisibility(App.Cache.eCreationContent, false);
+				UIUtils.updateVisibility(App.Cache.eQuestionContent, true);
+				App.ResultsOverlay.hideResults();
+				break;
+			case 2:
+				// Navigate to questions, show results.
+				UIUtils.updateVisibility(App.Cache.eCreationContent, false);
+				UIUtils.updateVisibility(App.Cache.eQuestionContent, true);
+				App.ResultsOverlay.updateProgressWidgets();
+				App.ResultsOverlay.showResults();
+				break;
+			default:
+				console.log("Navigation error, this contentId is not used.");
+				return;
+		}
+
+		let activeTab = App.Cache.eTabs.querySelector(".tab.active");
+		if (activeTab) {
+			activeTab.classList.remove("active");
+		}
+		let newTab = App.Cache.eTabs.querySelector('.tab[data-contentid="' + InContentId + '"]');
+		if (newTab) {
+			newTab.classList.add("active");
+		}
+
+		// console.log("Navigated to InContentId: " + InContentId);
+	}
+
+	updateTabVisibility() {
+		const questionFieldSets = App.Cache.eQuestionFieldsWrap.querySelectorAll("fieldset");
+		const questionAmount = questionFieldSets.length;
+		if (questionAmount > 0) {
+			App.Cache.eTabs.classList.remove("hide");
+		}
+		else {
+			App.Cache.eTabs.classList.add("hide");
+		}
+	}
+}
+
+class MyApp {
+	startModule() {
+		// Cache
+		this.Cache = new Cache();
 		// Register the forms
-		CreationForm.Register();
-		QuestionForm.Register();
-		ResultsOverlay.Register();
-		// Register the navigation module.
-		Navigation.Register();
+		this.CreationForm = new CreationForm();
+		this.QuestionForm = new QuestionForm();
+		this.ResultsOverlay = new ResultsOverlay();
 		// Initial navigation.
-		Navigation.NavigateTo(0);
-	})();
-  
-})();
+		this.Navigation = new Navigation();
+		this.Navigation.navigateTo(0);
+	}
+}
+
+const App = new MyApp();
+App.startModule();
