@@ -8,7 +8,8 @@ This browser application is a tool to help students with studying, by simulating
 This application should not be used for actual exams, as all answers can be accessed by students.
 To use it, open Exam.html in your web browser.
 Students write questions and answers in JSON format in step 1, answer their questions in step 2 and view their result (score) in step 3.
-A template for the JSON file is included "Lessons.json".
+"True / false" and multiple choice questions are supported.
+A template for the JSON file is included: "./Example/Lessons.json".
 
 
 Tips:
