@@ -170,6 +170,7 @@ class CreationForm {
 				let bHasAnyLessonToShow = false;
 				let newHTML = '';
 
+				let lessonID = 1;
 				for (const lessonX of lessons) {
 					let bLessonHasAnyQuestionsToShow = false;
 					const lessonTitle = StringUtils.stripHTML(lessonX.Lesson);
@@ -231,10 +232,10 @@ class CreationForm {
 						for (const answerX of answers) {
 							lessonHTML += '<div class="row"><div class="col-12">';
 
-							const answerID = 'radio-lesson-' + lessonTitle + '-question-' + questionID + '-answer-' + answerIndex;
+							const answerID = 'radio-lesson-' + lessonID + '-question-' + questionID + '-answer-' + answerIndex;
 							const answerType = questionX.RightAnswers.includes(answerX) ? 'right-answer' : 'wrong-answer';
 
-							const answerString = '<input type="' + inputType + '" id="' + answerID + '" name="question-' + questionID + '-answer" class="' + answerType +'" value="' + answerIndex + '"></input>';
+							const answerString = '<input type="' + inputType + '" id="' + answerID + '" name="lesson-' + lessonID + '-question-' + questionID + '-answer" class="' + answerType +'" value="' + answerIndex + '"></input>';
 							lessonHTML += answerString;
 							const answerlabel = '<label for="' + answerID + '">' + StringUtils.stripHTML(answerX) + '</label>';
 							lessonHTML += answerlabel;
@@ -259,6 +260,8 @@ class CreationForm {
 
 						bHasAnyLessonToShow = true;
 					}
+					
+					lessonID++;
 				}
 
 				if (!bHasAnyLessonToShow) {
