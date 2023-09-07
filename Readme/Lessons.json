@@ -1,0 +1,54 @@
+{
+	"StartDate": "2023-09-07",
+	"EndDate" : "2024-01-01",
+	"Lessons": [
+		{
+			"Lesson": "Chapter 1",
+			"Questions": [
+				{
+					"Question": "Question: How many legs does a spider have?",
+					"RightAnswers": [
+						"6 + 2",
+						"8"
+					],
+					"WrongAnswers": [
+						"6",
+						"10"
+					]
+				},
+				{
+					"Question": "What is the name of the toy cowboy in Toy Story?",
+					"RightAnswers": [
+						"Woody"
+					],
+					"WrongAnswers": [
+						"Buzz"
+					]
+				}
+			]
+		},
+		{
+			"Lesson": "Chapter 2",
+			"Questions": [
+				{
+					"Question": "What is the color of an emerald?",
+					"RightAnswers": [
+						"Green"
+					],
+					"WrongAnswers": [
+						"Blue"
+					]
+				},
+				{
+					"Question": "Whose nose grew longer every time he lied?",
+					"RightAnswers": [
+						"Pinocchio"
+					],
+					"WrongAnswers": [
+						"Woody"
+					]
+				}
+			]
+		}
+	]
+}
