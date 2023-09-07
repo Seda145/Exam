@@ -253,7 +253,7 @@ class CreationForm {
 
 					if (bLessonHasAnyQuestionsToShow) {
 						newHTML += '<div class="question-lesson-wrap">';
-						newHTML += '<h4 class="question-lesson-title">' + 'Les: ' + lessonTitle + '</h4>';
+						newHTML += '<h4 class="question-lesson-title">' + lessonTitle + '</h4>';
 						newHTML += lessonHTML;
 						newHTML += "</div>";
 
