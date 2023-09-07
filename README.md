@@ -19,3 +19,11 @@ Tips:
 3. The StartDate and EndDate fields in your JSON can be used to visualize how many days you have left to study for the actual exam.
 4. After completing the JSON input field and before submitting step 1, the exam experience can be tuned on the "Finalize" panel. 
 The checkbox "Show invalid questions" is used to display questions with no valid answers. I find this useful when I add homework questions to which I don't have the answer data yet.
+
+Creation of questions:
+
+![Create_Questions](https://github.com/Seda145/Exam/assets/30213433/be123b48-e230-4c11-81f5-cce7b558f116)
+
+Showing your results:
+
+![Results_Questions](https://github.com/Seda145/Exam/assets/30213433/8e9ae675-9fba-487c-a21c-c61900aa3f88)
