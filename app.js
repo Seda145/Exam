@@ -437,7 +437,7 @@ class ResultsOverlay {
 		let scoreToTen = (totalScore / questionAmount * 10);
 		// Round to 1 decimal:
 		scoreToTen = +scoreToTen.toFixed(1);
-		App.Cache.eProgressScoreToTen.innerHTML = '<p>Score (0-10):</br>' + scoreToTen + ' / 10</p>';
+		App.Cache.eProgressScoreToTen.innerHTML = '<p>Score:</br>' + scoreToTen + ' / 10</p>';
 	}
 }
 
