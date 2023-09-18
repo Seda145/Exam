@@ -230,7 +230,7 @@ class CreationForm {
 
 						let answerIndex = 0;
 						for (const answerX of answers) {
-							lessonHTML += '<div class="row"><div class="col-12">';
+							lessonHTML += '<div class="row"><div class="col-12 question-answer-wrap">';
 
 							const answerID = 'radio-lesson-' + lessonID + '-question-' + questionID + '-answer-' + answerIndex;
 							const answerType = questionX.RightAnswers.includes(answerX) ? 'right-answer' : 'wrong-answer';

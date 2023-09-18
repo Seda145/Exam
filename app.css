@@ -314,6 +314,17 @@ input[type=checkbox] {
 	margin-bottom: 50px;
 }
 
+#question-content .fieldstyle .question-answer-wrap {
+	display: flex;
+	padding-top: 10px;
+	border-top: thin solid #ffffff2e;
+}
+
+#question-content .fieldstyle .question-answer-wrap label {
+	/* Keep long texts next to the input element, instead of wrapping down a line. */
+	flex: 1;
+}
+
 #question-content .question-description {
 	font-size: 14px;
 	width: 450px;
