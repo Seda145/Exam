@@ -10,6 +10,7 @@ To use it, open Exam.html in your web browser.
 Students write questions and answers in JSON format in step 1, answer their questions in step 2 and view their result (score) in step 3.
 Optimally a JSON file is created for future use, which can simply be injected into the app by students.
 "True / false" and multiple choice questions are supported.
+Answers to questions are shuffled if they are not "True / False" answers.
 A template for the JSON file is included: "./Example/Lessons.json".
 
 
@@ -29,9 +30,10 @@ Creation of questions:
 
 Answering your questions:
 
-![afbeelding](https://github.com/Seda145/Exam/assets/30213433/067173ef-3c58-40b1-94ca-3c5b50162e78)
+![Answering_Questions](https://github.com/Seda145/Exam/assets/30213433/3107f8ff-3baa-4286-9b5c-67e635b0cc53)
 
 Showing your results:
 
-![afbeelding](https://github.com/Seda145/Exam/assets/30213433/469b99b9-7e7a-4dad-bf58-84df68f67848)
+![Results_Questions](https://github.com/Seda145/Exam/assets/30213433/9c6879c8-ed85-4b52-8377-df1ac5560880)
+
 
