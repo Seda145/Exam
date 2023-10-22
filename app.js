@@ -188,12 +188,24 @@ class CreationForm {
 					let lessonHTML = "";
 
 					for (const questionX of questions) {
-						if (questionX.RightAnswers.length == 0 || questionX.WrongAnswers.length == 0) {
+						// Default to an invalid question, we whitelist.
+						let bIsQuestionValidX = false;
+						if (questionX.RightAnswers.length > 1) {
+							// With multiple correct answers missing one would count as a mistake, so we don't need a wrong answer.
+							bIsQuestionValidX = true;
+						}
+						else if (questionX.RightAnswers.length == 1 && questionX.WrongAnswers.length > 0) {
+							// There must be at least one right answer and one (or more) wrong.
+							bIsQuestionValidX = true;
+						}
+
+						if (!bIsQuestionValidX) {
 							if (!bShowQuestionsWithInvalidAnswers) {
 								console.log("skipped question with invalid answers");
 								continue;
 							}
 						}
+
 						bLessonHasAnyQuestionsToShow = true;
 
 						lessonHTML += '<fieldset class="fieldstyle">';
