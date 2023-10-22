@@ -11,6 +11,7 @@ Students write questions and answers in JSON format in step 1, answer their ques
 Optimally a JSON file is created for future use, which can simply be injected into the app by students.
 "True / false" and multiple choice questions are supported.
 Answers to questions are shuffled if they are not "True / False" answers.
+A question is "valid" if it has more than 1 right answers, or 1 right answer and 1 or more wrong answers.
 A template for the JSON file is included: "./Example/Lessons.json".
 
 
