@@ -201,7 +201,7 @@ class CreationForm {
 
 						if (!bIsQuestionValidX) {
 							if (!bShowQuestionsWithInvalidAnswers) {
-								console.log("skipped question with invalid answers");
+								console.log("skipped question with invalid answers: " + questionX.Question);
 								continue;
 							}
 						}
