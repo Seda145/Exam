@@ -22,8 +22,8 @@ Instructions:
 9. After completing the JSON input field and before submitting step 1, the exam experience can be tuned on the "Finalize" panel. 
 10. The app automatically displays checkbox inputs for questions with multiple right answers. Note that if you write 2 correct answers, 0 wrong answers, the user might estimate both checkboxes on the question equal correct answers. Consider reformatting such questions.
 11. "Valid" questions contain answers in a valid format. They can optionally be shown if invalid and will be logged if not shown. A question is valid when:
-	- It has > 1 right answers (checkbox type answers).
-	- It has 1 right answer, one wrong answer (Radio type answers).
+	- It has more than 1 right answers (checkbox type).
+	- It has 1 right answer, 1 or more wrong answers (Radio type).
 
 
 
