@@ -9,8 +9,14 @@ body {
 	/* background-color: #293642; */
 }
 
+html {
+	/* Prevent a noticable jump from the configuration page to other pages caused by the scroll bar width. */
+	overflow-y: scroll;
+}
+
 main {
 	margin-bottom: 175px;
+	margin-top: 50px;
 }
 
 button,
@@ -119,7 +125,6 @@ hr {
 
 #progress-bar {
 	display: none;
-	width: 100%;
 	background-color: #181e18;
 	border-radius: 15px;
 	margin-top: 15px;
@@ -198,7 +203,6 @@ hr {
 
 #tabs {
 	display: flex;
-	width: 100%;
 	justify-content: flex-end;
 }
 
@@ -258,6 +262,9 @@ hr {
 	margin-top: 2px;
 	margin-bottom: 10px;
 	vertical-align: top;
+}
+
+.fieldstyle .question-answer-wrap label {
 	padding-left: 10px;
 }
 
@@ -279,7 +286,9 @@ input[type=checkbox] {
 /* Creation Content */
 
 #textarea-creation-input {
-	height: 67vh
+	height: 67vh;
+	tab-size: 2;
+	font-size: 12px;
 }
 
 #creation-parameters label {
@@ -297,9 +306,6 @@ input[type=checkbox] {
 .question-lesson-wrap {
 	padding: 15px;
 	background-color: #110d1e;
-	width: 800px;
-	max-width: 100%;
-	margin: auto;
 	margin-bottom: 100px;
 	border-radius: 15px;
 	border: thin solid #226f8d;

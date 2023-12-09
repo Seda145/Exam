@@ -39,6 +39,7 @@ class Cache {
 		this.eCreationContent = document.getElementById("creation-content");
 		this.eCreationForm = document.getElementById("creation-form");
 		this.eTextareaCreationInput = document.getElementById("textarea-creation-input");
+		this.eCreationContentSubmitRow = document.getElementById("creation-content-submit-row");
 		this.eQuestionForm = document.getElementById("question-form");
 		this.eQuestionContent = document.getElementById("question-content");
 		this.eQuestionFieldsWrap = document.getElementById("question-fields-wrap");
@@ -52,6 +53,7 @@ class Cache {
 		this.eProgressDateBarInner = document.getElementById("progress-date-bar-inner");
 		this.eProgressDateBarText = document.getElementById("progress-date-bar-text");
 		this.eButtonInjectFile = document.getElementById("creation-form-button-inject-file");
+		this.eInjectFileFeedback = document.getElementById("inject-file-feedback");
 		this.eNumberStartAtLesson = document.getElementById("creation-form-number-start-at-lesson");
 		this.eNumberEndAtLesson	= document.getElementById("creation-form-number-end-at-lesson");
 
@@ -76,6 +78,7 @@ class Cache {
 			&& this.eCreationContent
 			&& this.eCreationForm 
 			&& this.eTextareaCreationInput
+			&& this.eCreationContentSubmitRow
 			&& this.eQuestionForm 
 			&& this.eQuestionContent
 			&& this.eQuestionFieldsWrap
@@ -89,6 +92,7 @@ class Cache {
 			&& this.eProgressDateBarInner
 			&& this.eProgressDateBarText
 			&& this.eButtonInjectFile
+			&& this.eInjectFileFeedback
 			&& this.eNumberStartAtLesson
 			&& this.eNumberEndAtLesson
 		);
@@ -103,9 +107,13 @@ class Cache {
 			this.JSON = JSON.parse(this.eTextareaCreationInput.value);
 			document.dispatchEvent(this.onJSONUpdated);
 			console.log("Updated json cache.");
+			this.eCreationContentSubmitRow.classList.remove("hide");
+			this.eInjectFileFeedback.classList.add("hide");
 		} 
 		catch (error) {
 			console.error(error);
+			this.eCreationContentSubmitRow.classList.add("hide");
+			this.eInjectFileFeedback.classList.remove("hide");
 		}
 	}
 }

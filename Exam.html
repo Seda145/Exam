@@ -19,28 +19,25 @@
 			<div id="creation-content" class="main-wrap">
 				<form id="creation-form">
 					<div class="row">
-						<div class="col-8 col-12-mob">
+						<div class="col-12">
 							<fieldset class="fieldstyle">
-								<legend>Creation (JSON)</legend>
-								<textarea id="textarea-creation-input" name="creation-data"></textarea>
-							</fieldset>
-						</div>
-
-						<div class="col-4 col-12-mob">
-							<fieldset class="fieldstyle">
-								<legend>JSON Injection</legend>
-
-								<label for="creation-form-button-inject-file">Or, inject a JSON file:</label>		
+								<legend>Please load your lessons file:</legend>
+								
 								<input type="file" accept=".json", id="creation-form-button-inject-file">
-
+								<p id="inject-file-feedback" class="hide">Your file contains errors. It can be tested at <a href="https://jsonlint.com/" target="_blank" rel="noopener noreferrer">https://jsonlint.com/</a></p>
+							</fieldset>
+							
+							<fieldset class="fieldstyle hide">
+								<legend>Creation (JSON)</legend>
+								<textarea readonly id="textarea-creation-input" name="creation-data"></textarea>
 							</fieldset>
 
 							<fieldset id="creation-parameters" class="fieldstyle">
-								<legend>Finalize</legend>
+								<legend>Configure your experience:</legend>
 
 								<div>
 									<label for="creation-form-checkbox-show-questions-with-invalid-answers">Show invalid questions:</label>		
-									<input type="checkbox" checked="" id="creation-form-checkbox-show-questions-with-invalid-answers" name="creation-show-questions-with-invalid-answers">
+									<input type="checkbox" id="creation-form-checkbox-show-questions-with-invalid-answers" name="creation-show-questions-with-invalid-answers">
 								</div>
 
 								<div>
@@ -68,11 +65,11 @@
 
 					</div>
 					
-					<div class="row submit-row">
-						<div class="col-8 col-12-mob">
+					<div id="creation-content-submit-row" class="row submit-row hide">
+						<div class="col-12">
 							<fieldset class="fieldstyle">
-								<legend>Submit</legend>
-								<input type="submit" value="Submit">
+								<legend>Enjoy!</legend>
+								<input type="submit" value="Start exam">
 							</fieldset>
 						</div>
 					</div>
@@ -90,8 +87,8 @@
 					<div class="row submit-row">
 						<div class="col-12">
 							<fieldset class="fieldstyle">
-								<legend>Submit</legend>
-								<input type="submit" value="Submit">
+								<legend>Ready?</legend>
+								<input type="submit" value="Show my results">
 							</fieldset>
 						</div>
 					</div>
@@ -135,9 +132,9 @@
 				</div>
 
 				<div id="tabs" class="main-wrap hide">
-					<span class="tab" data-contentid="0">Create</span>
-					<span class="tab" data-contentid="1">Questions</span>
-					<span class="tab" data-contentid="2">Results</span>
+					<span class="tab" data-contentid="0">Configure</span>
+					<span class="tab" data-contentid="1">My Exam</span>
+					<span class="tab" data-contentid="2">My Results</span>
 				</div>
 			</div>
 						
