@@ -55,6 +55,8 @@ Your answers are colored.
 2. Blue means you missed a correct answer.
 3. Red means your answer is incorrect.
 
+The teacher can write a note on every question which will be visible while you review your results. This is a powerful way to add information or context without cluttering the exam process.
+
 ***
 
 Good luck and enjoy!
