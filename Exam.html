@@ -22,9 +22,16 @@
 				<form id="creation-form">
 					<div class="row">
 						<div class="col-12">
+							<div class="introduction-wrap">
+								<h1>Welcome!</h1>
+								
+								<p>This app will help you prepare for a real exam, by simulating one.</p>
+							</div>
+						
 							<fieldset class="fieldstyle">
 								<legend>Please load your lessons file:</legend>
 								
+								<p>This file contains your exam. You can <a href="https://github.com/Seda145/Exam/blob/main/Example/Lessons.json" target="_blank" rel="noopener noreferrer">write one</a> or ask your teacher for one.</p>
 								<input type="file" accept=".json", id="creation-form-button-inject-file">
 								<p id="inject-file-feedback" class="hide">Your file contains errors. It can be tested at <a href="https://jsonlint.com/" target="_blank" rel="noopener noreferrer">https://jsonlint.com/</a></p>
 							</fieldset>

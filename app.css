@@ -121,6 +121,15 @@ hr {
 	padding-bottom: 25px;
 }
 
+a {
+	color: #a6ffac;
+	transition: opacity 0.2s linear;
+}
+
+a:hover {
+	opacity: 0.8;
+}
+
 /* Tab system */
 
 #progress-bar {
@@ -284,6 +293,10 @@ input[type=checkbox] {
 }
 
 /* Creation Content */
+
+#creation-content .introduction-wrap {
+	margin-bottom: 75px;
+}
 
 #textarea-creation-input {
 	height: 67vh;
