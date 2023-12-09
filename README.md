@@ -1,42 +1,76 @@
 [[ Copyright Roy Wierer (Seda145) ]]
 https://nl.linkedin.com/in/roy-wierer-68643a9b 
 
-
-Using the application:
+***
 
 This browser application is a tool to help students with studying, by simulating an exam.
 This application should not be used for actual exams, as all answers can be accessed by students.
-To use it, open Exam.html in your web browser.
+
+***
+
+To use it: 
+1. Download all files. Unzip them if you downloaded the app packed as zip.
+2. Open App.html in your web browser.
+
+***
+
+This is what you should see on the Configuration page:
+
+***
+
+![afbeelding](https://github.com/Seda145/Exam/assets/30213433/c6b38eeb-811d-4a34-b010-1c01fbc6189b)
+
+***
+
+The application asks you for a "Lessons file". An example file is provided with this application:
+
+![afbeelding](https://github.com/Seda145/Exam/assets/30213433/07b96d80-5a6a-4a1d-902b-de458b2f75db)
+
+Preferrably your teacher should write this file and share it with students. It is written in a specific format in a text editor like Notepad (or a more json friendly editor). When you are done you can validate the file format using [JSONLint](https://jsonlint.com/). 
+
+***
+
+Once you have selected a valid file you can further configure your experience or start your exam directly. 
+This is what you will see on the "My Exam" page, using the example json file:
+
+***
+
+![afbeelding](https://github.com/Seda145/Exam/assets/30213433/f9e0fd69-3620-4256-bb40-53fbe41c87d1)
+
+***
+
+At any time you will be able to see the current results of your test, by clicking on the "My Results" button. This will not end your exam. 
+
+***
+
+![afbeelding](https://github.com/Seda145/Exam/assets/30213433/c30904c6-3ca8-4840-aad8-a51a9faf2063)
 
 
-Instructions:
+***
 
-1. Questions are created in step 1 with JSON, answered in step 2 and answers are reviewed in step 3.
-2. You can upload a JSON file into the app. Optimally you or a teacher creates and shares this file so it has to be written only once.
-3. A template for the JSON file is included: "./Example/Lessons.json".
-4. If you can't submit your JSON, it is invalid. Try using a JSON linter like https://jsonlint.com/ . Look at the browser console for logs.
-5. For use on mobile devices it might be necessary to merge the HTML file with its css and javascript dependencies for your mobile browser to load them.
-6. Answers to questions are shuffled if they are not literal "True / False" answers.
-7. The StartDate and EndDate fields in your JSON can be used to visualize how many days you have left to study for the actual exam.
-8. The "Note" field in your JSON will be displayed when viewing your results. Write additional information here to explain why answers are correct or not.
-9. After completing the JSON input field and before submitting step 1, the exam experience can be tuned on the "Finalize" panel. 
-10. The app automatically displays checkbox inputs for questions with multiple right answers. Note that if you write 2 correct answers, 0 wrong answers, the user might estimate both checkboxes on the question equal correct answers. Consider reformatting such questions.
-11. "Valid" questions contain answers in a valid format. They can optionally be shown if invalid and will be logged if not shown. A question is valid when:
+While viewing your results, your current score is displayed among other information, like the amount of questions you answered and the time you have left until the data of the real exam. 
+
+Your answers are colored.
+1. Green means a correct answer.
+2. Blue means you missed a correct answer.
+3. Red means your answer is incorrect.
+
+***
+
+Good luck and enjoy!
+
+***
+
+Tips:
+
+1. For use on mobile devices it might be necessary to merge the HTML file with its css and javascript dependencies for your mobile browser to load them.
+2. Answers to questions are shuffled if they are not literal "True / False" answers.
+3. The StartDate and EndDate fields in your JSON can be used to visualize how many days you have left to study for the actual exam.
+4. The "Note" field in your JSON will be displayed when viewing your results. Write additional information here to explain why answers are correct or not.
+5. After completing the JSON input field and before submitting step 1, the exam experience can be tuned on the "Finalize" panel. 
+6. The app automatically displays checkbox inputs for questions with multiple right answers. Note that if you write 2 correct answers, 0 wrong answers, the user might estimate both checkboxes on the question equal correct answers. Consider reformatting such questions.
+7. "Valid" questions contain answers in a valid format. They can optionally be shown if invalid and will be logged if not shown. A question is valid when:
 	- It has more than 1 right answers (checkbox type).
 	- It has 1 right answer, 1 or more wrong answers (Radio type).
-
-
-
-Creation of questions:
-
-![Create_Questions](https://github.com/Seda145/Exam/assets/30213433/be123b48-e230-4c11-81f5-cce7b558f116)
-
-Answering your questions:
-
-![Answering_Questions](https://github.com/Seda145/Exam/assets/30213433/3107f8ff-3baa-4286-9b5c-67e635b0cc53)
-
-Showing your results:
-
-![Results_Questions](https://github.com/Seda145/Exam/assets/30213433/9c6879c8-ed85-4b52-8377-df1ac5560880)
 
 
