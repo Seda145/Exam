@@ -1,4 +1,4 @@
-/**[[ Copyright Roy Wierer (Seda145) ]]**/
+/**! GNU Affero General Public License v3.0. See LICENSE.md. Copyright 2023 Roy Wierer (Seda145). **/
 
 
 class UIUtils {
@@ -104,10 +104,18 @@ class Cache {
 
 	updateJSONCache() {
 		try {
-			this.JSON = JSON.parse(this.eTextareaCreationInput.value);
+			// Currently the cache is updated when the input on the json textarea changes.
+			// I'm only going to parse if the value of that field is not empty, or we reach the error state.
+			if (this.eTextareaCreationInput.value != "") {
+				this.JSON = JSON.parse(this.eTextareaCreationInput.value);	
+				this.eCreationContentSubmitRow.classList.remove("hide");
+			}
+			else {
+				this.JSON = {};
+				this.eCreationContentSubmitRow.classList.add("hide");
+			}
 			document.dispatchEvent(this.onJSONUpdated);
 			console.log("Updated json cache.");
-			this.eCreationContentSubmitRow.classList.remove("hide");
 			this.eInjectFileFeedback.classList.add("hide");
 		} 
 		catch (error) {
