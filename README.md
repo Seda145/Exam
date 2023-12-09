@@ -10,7 +10,7 @@ This application should not be used for actual exams, as all answers can be acce
 
 To use it: 
 1. Download all files. Unzip them if you downloaded the app packed as zip.
-2. Open App.html in your web browser.
+2. Open Exam.html in your web browser.
 
 ***
 
