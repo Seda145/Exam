@@ -9,7 +9,7 @@ This application should not be used for actual exams, as all answers can be acce
 ***
 
 To use it: 
-1. Download all files. Unzip them if you downloaded the app packed as zip.
+1. Download the [latest release](https://github.com/Seda145/Exam/releases). Unzip it if you received a zip file.
 2. Open Exam.html in your web browser.
 
 ***
@@ -65,7 +65,7 @@ Good luck and enjoy!
 
 Tips:
 
-1. For use on mobile devices it might be necessary to merge the HTML file with its css and javascript dependencies for your mobile browser to load them.
+1. The release packs css / js dependencies into Exam.html so it can be used with browsers on mobile devices.
 2. Answers to questions are shuffled if they are not literal "True / False" answers.
 3. The StartDate and EndDate fields in your JSON can be used to visualize how many days you have left to study for the actual exam.
 4. The "Note" field in your JSON will be displayed when viewing your results. Write additional information here to explain why answers are correct or not.
